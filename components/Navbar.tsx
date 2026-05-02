@@ -1,43 +1,119 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, Suspense } from "react";
 import Link from "next/link";
-import { Menu, X, Phone } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { Menu, X } from "lucide-react";
 
 const navLinks = [
-  { name: "Home", href: "#home" },
-  { name: "About", href: "#about" },
-  { name: "Products", href: "#products" },
-  { name: "Testimonials", href: "#testimonials" },
-  { name: "Contact", href: "#contact" },
+  { name: "Home", href: "/" },
+  { name: "About", href: "/about" },
+  { name: "Products", href: "/products" },
+  { name: "Testimonials", href: "/testimonials" },
+  { name: "Contact", href: "/contact" },
 ];
 
-export default function Navbar() {
+function NavbarContent() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [hidden, setHidden] = useState(false);
+  const lastScrollY = useRef(0);
+  const pathname = usePathname();
+  const lastPathFromScroll = useRef<string | null>(null);
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+      const currentScrollY = window.scrollY;
+      setScrolled(currentScrollY > 20);
+
+      if (currentScrollY > lastScrollY.current && currentScrollY > 100) {
+        setHidden(true);
+        setIsOpen(false);
+      } else if (currentScrollY < lastScrollY.current) {
+        setHidden(false);
+      }
+      lastScrollY.current = currentScrollY;
     };
-    window.addEventListener("scroll", handleScroll);
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Update URL on scroll
+  useEffect(() => {
+    const observerOptions = {
+      root: null,
+      rootMargin: '-45% 0px -45% 0px',
+      threshold: 0
+    };
+
+    const handleIntersect = (entries: IntersectionObserverEntry[]) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.id;
+          const targetPath = id === 'home' ? '/' : `/${id}`;
+          
+          if (id && pathname !== targetPath && navLinks.some(l => l.href === targetPath)) {
+            // Track that this update is coming from a scroll event
+            lastPathFromScroll.current = targetPath;
+            window.history.replaceState(null, '', targetPath);
+          }
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(handleIntersect, observerOptions);
+    
+    navLinks.forEach(link => {
+      const id = link.href === '/' ? 'home' : link.href.substring(1);
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, [pathname]);
+
+  // Scroll to section on path change
+  useEffect(() => {
+    // If the pathname change was just triggered by our scroll observer, don't jump
+    if (pathname === lastPathFromScroll.current) {
+      // Clear it so that a future Navbar click to the same path will work
+      // (though pathname won't change if it's the same, so this effect wouldn't run anyway)
+      return;
+    }
+
+    const id = pathname === '/' ? 'home' : pathname.substring(1);
+    const validIds = navLinks.map(l => l.href === '/' ? 'home' : l.href.substring(1));
+
+    if (id === "home") {
+      window.scrollTo({ top: 0, behavior: "instant" });
+      return;
+    }
+
+    if (id && validIds.includes(id)) {
+      const target = document.getElementById(id);
+      if (target) {
+        target.scrollIntoView({
+          behavior: "instant",
+          block: "start"
+        });
+      }
+    }
+  }, [pathname]);
 
   return (
     <nav
       className={`fixed top-0 w-full z-50 transition-all duration-300 ${
         scrolled ? "glass py-3 shadow-sm" : "bg-transparent py-5"
-      }`}
+      } ${hidden ? "-translate-y-full" : "translate-y-0"}`}
     >
       <div className="container mx-auto px-6 flex justify-between items-center">
-        <Link href="/" className="flex items-center gap-2 group">
-          <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-white font-bold text-xl group-hover:scale-110 transition-transform">
-            V
-          </div>
-          <span className="font-display font-bold text-2xl tracking-tight text-foreground">
-            Veesha<span className="text-primary">Wellness</span>
-          </span>
+        <Link 
+          href="/" 
+          className="flex items-center gap-2 group"
+          onClick={() => { lastPathFromScroll.current = null; }}
+        >
+          <img src="/logo.svg" alt="Veesha Wellness" className="h-10 md:h-12 w-auto object-contain" />
         </Link>
 
         {/* Desktop Nav */}
@@ -46,18 +122,14 @@ export default function Navbar() {
             <Link
               key={link.name}
               href={link.href}
-              className="text-foreground/80 hover:text-primary font-medium transition-colors"
+              onClick={() => { lastPathFromScroll.current = null; }}
+              className={`text-foreground/80 hover:text-primary font-medium transition-colors ${
+                pathname === link.href ? "text-primary font-bold" : ""
+              }`}
             >
               {link.name}
             </Link>
           ))}
-          <a
-            href="tel:+1234567890"
-            className="flex items-center gap-2 bg-primary hover:bg-primary-hover text-white px-5 py-2.5 rounded-full font-semibold transition-all shadow-md hover:shadow-lg active:scale-95"
-          >
-            <Phone size={18} />
-            <span>Call Us</span>
-          </a>
         </div>
 
         {/* Mobile Menu Toggle */}
@@ -76,22 +148,27 @@ export default function Navbar() {
             <Link
               key={link.name}
               href={link.href}
-              className="text-lg font-medium text-foreground/90 py-2 border-b border-border/50"
-              onClick={() => setIsOpen(false)}
+              className={`text-lg font-medium py-2 border-b border-border/50 ${
+                pathname === link.href ? "text-primary" : "text-foreground/90"
+              }`}
+              onClick={() => {
+                lastPathFromScroll.current = null;
+                setIsOpen(false);
+              }}
             >
               {link.name}
             </Link>
           ))}
-          <a
-            href="tel:+1234567890"
-            className="bg-primary text-white text-center py-3 rounded-xl font-bold flex items-center justify-center gap-2"
-            onClick={() => setIsOpen(false)}
-          >
-            <Phone size={20} />
-            Call Now
-          </a>
         </div>
       )}
     </nav>
+  );
+}
+
+export default function Navbar() {
+  return (
+    <Suspense fallback={null}>
+      <NavbarContent />
+    </Suspense>
   );
 }

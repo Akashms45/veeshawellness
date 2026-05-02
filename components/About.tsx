@@ -1,5 +1,9 @@
 "use client";
 import { useEffect, useRef, useState } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const clamp01 = (t: number) => Math.max(0, Math.min(1, t));
 const ease    = (t: number) => t < 0.5 ? 2*t*t : -1 + (4 - 2*t)*t;
@@ -139,35 +143,39 @@ function DesktopCardAnimation({
   backgroundColor,
 }: CardAnimationProps) {
   const wrapRef = useRef<HTMLDivElement>(null);
-  const rafRef  = useRef<number>(0);
+  const stickyRef = useRef<HTMLDivElement>(null);
   const [p,  setP]  = useState(0);
   // ✦ Always start with static SSR-safe values so server & client HTML match
   const [vw, setVw] = useState(1440);
   const [vh, setVh] = useState(900);
 
   useEffect(() => {
-    setVw(globalThis.window.innerWidth);
-    setVh(globalThis.window.innerHeight);
     const onResize = () => { setVw(globalThis.window.innerWidth); setVh(globalThis.window.innerHeight); };
+    // Delay initial state update to avoid cascading render error
+    setTimeout(onResize, 0);
     globalThis.window.addEventListener('resize', onResize);
     return () => globalThis.window.removeEventListener('resize', onResize);
   }, []);
 
   useEffect(() => {
-    const calc = () => {
-      const el = wrapRef.current;
-      if (!el) return;
-      const scrolled = -el.getBoundingClientRect().top;
-      const total    = el.offsetHeight - globalThis.window.innerHeight;
-      setP(clamp01(scrolled / total));
+    const wrap = wrapRef.current;
+    const sticky = stickyRef.current;
+    if (!wrap || !sticky) return;
+
+    const st = ScrollTrigger.create({
+      trigger: wrap,
+      start: 'top top',
+      end: 'bottom bottom',
+      pin: sticky,
+      pinSpacing: false,
+      onUpdate: (self) => {
+        setP(self.progress);
+      }
+    });
+
+    return () => {
+      st.kill();
     };
-    const onScroll = () => {
-      globalThis.window.cancelAnimationFrame(rafRef.current);
-      rafRef.current = globalThis.window.requestAnimationFrame(calc);
-    };
-    globalThis.window.addEventListener('scroll', onScroll, { passive: true });
-    calc();
-    return () => globalThis.window.removeEventListener('scroll', onScroll);
   }, []);
 
   const BOTTOM_VH = 3;
@@ -250,133 +258,136 @@ function DesktopCardAnimation({
   const line2 = words.slice(mid).join(' ');
 
   return (
-    <div ref={wrapRef} style={{ height: '600vh' }}>
-      <div style={{
-        position: 'sticky', top: 0, height: '100vh',
-        backgroundColor,
-        fontFamily: 'var(--font-sans)',
-      }}>
-        <div style={{
-          position: 'absolute', top: '3vh', left: 0, right: 0,
-          zIndex: 10, pointerEvents: 'none', userSelect: 'none',
-          opacity: hOpacity,
-          transform: `translateY(${hSlide}px)`,
-          willChange: 'opacity, transform',
+    <div id="about">
+      <div ref={wrapRef} style={{ height: '350vh', position: 'relative' }}>
+        <div ref={stickyRef} style={{
+          position: 'absolute', top: 0, left: 0, width: '100%', height: '100vh',
+          backgroundColor,
+          overflow: 'hidden',
+          fontFamily: 'var(--font-sans)',
         }}>
           <div style={{
-            textAlign: 'left',
-            paddingLeft: '20%',
-            fontSize: 'clamp(2rem, 5.2vw, 5.6rem)',
-            fontWeight: 800,
-            fontFamily: 'var(--font-display)',
-            color: '#140505',
-            lineHeight: 1.05,
-            letterSpacing: '-0.025em',
+            position: 'absolute', top: '3vh', left: 0, right: 0,
+            zIndex: 10, pointerEvents: 'none', userSelect: 'none',
+            opacity: hOpacity,
+            transform: `translateY(${hSlide}px)`,
+            willChange: 'opacity, transform',
           }}>
-            {line1}
-          </div>
-          <div style={{
-            paddingLeft: '50%',
-            fontSize: 'clamp(2rem, 5.2vw, 5.6rem)',
-            fontWeight: 800,
-            fontFamily: 'var(--font-display)',
-            color: '#140505',
-            lineHeight: 1.05,
-            letterSpacing: '-0.025em',
-            whiteSpace: 'nowrap',
-          }}>
-            {line2}
-          </div>
-        </div>
-
-        <span style={{
-          position: 'absolute', bottom: BOTTOM, left: '4vw',
-          zIndex: 30, fontSize: '0.7rem', fontWeight: 800,
-          letterSpacing: '0.06em', textTransform: 'uppercase', color: '#140505',
-        }}>
-          {leftText}
-        </span>
-
-        <button style={{
-          all: 'unset', position: 'absolute', bottom: BOTTOM, right: '4vw',
-          zIndex: 30, fontSize: '0.7rem', fontWeight: 700,
-          color: '#140505', borderBottom: '1px solid #140505',
-          paddingBottom: '1px', cursor: 'pointer',
-        }}>
-          {rightText}
-        </button>
-
-        <SideText opacity={t1Opacity} slide={t1Slide} body={bodyText!}  cta={ctaText!} left={textLeft_px} bottom={textBottom_css} />
-        <SideText opacity={t2Opacity} slide={t2Slide} body={bodyText2!} cta={ctaText2 || ctaText!} left={textLeft_px} bottom={textBottom_css} />
-        <SideText opacity={t3Opacity} slide={t3Slide} body={bodyText3!} cta={ctaText3 || ctaText!} left={textLeft_px} bottom={textBottom_css} />
-
-        {/* CARD 1 */}
-        {(() => {
-          let style: React.CSSProperties = { position: 'absolute', zIndex: 20, overflow: 'hidden', background: '#140505', willChange: 'width, height' };
-          if (p < 0.33) {
-            style = { ...style, bottom: BOTTOM, left: '50%', transform: 'translateX(-50%)', width: `${c1W}vw`, height: `${c1H}vh`, borderRadius: c1R };
-          } else if (p < 0.66) {
-            style = { ...style, left: `${c1B_left}px`, top: `${c1B_top}px`, width: `${c1B_W}vw`, height: `${c1B_H}vh`, borderRadius: c1B_R, willChange: 'width, height, left, top' };
-          } else {
-            style = { ...style, left: `${smL_left_px}px`, top: `${smL_top_px}px`, width: `${c1C_W}vw`, height: `${c1C_H}vh`, borderRadius: c1C_R };
-          }
-          return (
-            <div style={style}>
-              {imageSrc && (
-                <img 
-                  src={imageSrc} 
-                  alt="" 
-                  loading="lazy" 
-                  onError={(e) => {
-                    if ((e.target as HTMLImageElement).src.endsWith('.webp')) {
-                      (e.target as HTMLImageElement).src = imageSrc.replace('.webp', '.png');
-                    }
-                  }}
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', display: 'block' }} 
-                />
-              )}
+            <div style={{
+              textAlign: 'left',
+              paddingLeft: '20%',
+              fontSize: 'clamp(2rem, 5.2vw, 5.6rem)',
+              fontWeight: 800,
+              fontFamily: 'var(--font-display)',
+              color: '#140505',
+              lineHeight: 1.05,
+              letterSpacing: '-0.025em',
+            }}>
+              {line1}
             </div>
-          );
-        })()}
+            <div style={{
+              paddingLeft: '50%',
+              fontSize: 'clamp(2rem, 5.2vw, 5.6rem)',
+              fontWeight: 800,
+              fontFamily: 'var(--font-display)',
+              color: '#140505',
+              lineHeight: 1.05,
+              letterSpacing: '-0.025em',
+              whiteSpace: 'nowrap',
+            }}>
+              {line2}
+            </div>
+          </div>
 
-        {/* CARD 2 */}
-        {(() => {
-          if (p < 0.33) {
+          <span style={{
+            position: 'absolute', bottom: BOTTOM, left: '4vw',
+            zIndex: 30, fontSize: '0.7rem', fontWeight: 800,
+            letterSpacing: '0.06em', textTransform: 'uppercase', color: '#140505',
+          }}>
+            {leftText}
+          </span>
+
+          <button style={{
+            all: 'unset', position: 'absolute', bottom: BOTTOM, right: '4vw',
+            zIndex: 30, fontSize: '0.7rem', fontWeight: 700,
+            color: '#140505', borderBottom: '1px solid #140505',
+            paddingBottom: '1px', cursor: 'pointer',
+          }}>
+            {rightText}
+          </button>
+
+          <SideText opacity={t1Opacity} slide={t1Slide} body={bodyText!}  cta={ctaText!} left={textLeft_px} bottom={textBottom_css} />
+          <SideText opacity={t2Opacity} slide={t2Slide} body={bodyText2!} cta={ctaText2 || ctaText!} left={textLeft_px} bottom={textBottom_css} />
+          <SideText opacity={t3Opacity} slide={t3Slide} body={bodyText3!} cta={ctaText3 || ctaText!} left={textLeft_px} bottom={textBottom_css} />
+
+          {/* CARD 1 */}
+          {(() => {
+            let style: React.CSSProperties = { position: 'absolute', zIndex: 20, overflow: 'hidden', background: '#140505', willChange: 'width, height' };
+            if (p < 0.33) {
+              style = { ...style, bottom: BOTTOM, left: '50%', transform: 'translateX(-50%)', width: `${c1W}vw`, height: `${c1H}vh`, borderRadius: c1R };
+            } else if (p < 0.66) {
+              style = { ...style, left: `${c1B_left}px`, top: `${c1B_top}px`, width: `${c1B_W}vw`, height: `${c1B_H}vh`, borderRadius: c1B_R, willChange: 'width, height, left, top' };
+            } else {
+              style = { ...style, left: `${smL_left_px}px`, top: `${smL_top_px}px`, width: `${c1C_W}vw`, height: `${c1C_H}vh`, borderRadius: c1C_R };
+            }
             return (
-              <div style={{ position: 'absolute', bottom: BOTTOM, left: smR_left_px, width: `${SM_VW}vw`, height: `${SM_VH}vh`, overflow: 'visible', zIndex: 20, pointerEvents: 'none' }}>
-                <div style={{ position: 'absolute', bottom: 0, right: 0, width: `${c2_app_W}vw`, height: `${c2_app_H}vh`, borderRadius: c2_app_R, overflow: 'hidden', background: '#140505', pointerEvents: 'auto', willChange: 'width, height' }}>
-                  {image2Src && <img src={image2Src} alt="" loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', display: 'block' }} />}
+              <div style={style}>
+                {imageSrc && (
+                  <img 
+                    src={imageSrc} 
+                    alt="" 
+                    loading="lazy" 
+                    onError={(e) => {
+                      if ((e.target as HTMLImageElement).src.endsWith('.webp')) {
+                        (e.target as HTMLImageElement).src = imageSrc.replace('.webp', '.png');
+                      }
+                    }}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', display: 'block' }} 
+                  />
+                )}
+              </div>
+            );
+          })()}
+
+          {/* CARD 2 */}
+          {(() => {
+            if (p < 0.33) {
+              return (
+                <div style={{ position: 'absolute', bottom: BOTTOM, left: smR_left_px, width: `${SM_VW}vw`, height: `${SM_VH}vh`, overflow: 'visible', zIndex: 20, pointerEvents: 'none' }}>
+                  <div style={{ position: 'absolute', bottom: 0, right: 0, width: `${c2_app_W}vw`, height: `${c2_app_H}vh`, borderRadius: c2_app_R, overflow: 'hidden', background: '#140505', pointerEvents: 'auto', willChange: 'width, height' }}>
+                    {image2Src && <img src={image2Src} alt="" loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', display: 'block' }} />}
+                  </div>
                 </div>
-              </div>
-            );
-          } else if (p < 0.66) {
-            return (
-              <div style={{ position: 'absolute', bottom: `${btm_px}px`, left: `${c2_left}px`, width: `${c2_W}vw`, height: `${c2_H}vh`, borderRadius: c2_R, zIndex: 21, overflow: 'hidden', background: '#140505', willChange: 'width, height, left' }}>
-                {image2Src && <img src={image2Src} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', display: 'block' }} loading="lazy" />}
-              </div>
-            );
-          } else {
-            return (
-              <div style={{ position: 'absolute', left: `${c2C_left}px`, top: `${c2C_top}px`, width: `${c2C_W}vw`, height: `${c2C_H}vh`, borderRadius: c2C_R, zIndex: 21, overflow: 'hidden', background: '#140505', willChange: 'width, height, left, top' }}>
-                {image2Src && <img src={image2Src} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', display: 'block' }} loading="lazy" />}
-              </div>
-            );
-          }
-        })()}
+              );
+            } else if (p < 0.66) {
+              return (
+                <div style={{ position: 'absolute', bottom: `${btm_px}px`, left: `${c2_left}px`, width: `${c2_W}vw`, height: `${c2_H}vh`, borderRadius: c2_R, zIndex: 21, overflow: 'hidden', background: '#140505', willChange: 'width, height, left' }}>
+                  {image2Src && <img src={image2Src} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', display: 'block' }} loading="lazy" />}
+                </div>
+              );
+            } else {
+              return (
+                <div style={{ position: 'absolute', left: `${c2C_left}px`, top: `${c2C_top}px`, width: `${c2C_W}vw`, height: `${c2C_H}vh`, borderRadius: c2C_R, zIndex: 21, overflow: 'hidden', background: '#140505', willChange: 'width, height, left, top' }}>
+                  {image2Src && <img src={image2Src} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', display: 'block' }} loading="lazy" />}
+                </div>
+              );
+            }
+          })()}
 
-        {/* CARD 3 */}
-        {inB && !inC && (
-          <div style={{ position: 'absolute', bottom: BOTTOM, left: smR_left_px, width: `${SM_VW}vw`, height: `${SM_VH}vh`, overflow: 'visible', zIndex: 22, pointerEvents: 'none' }}>
-            <div style={{ position: 'absolute', bottom: 0, right: 0, width: `${c3_app_W}vw`, height: `${c3_app_H}vh`, borderRadius: c3_app_R, overflow: 'hidden', background: '#140505', pointerEvents: 'auto', willChange: 'width, height' }}>
-              {image3Src && <img src={image3Src} alt="" loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', display: 'block' }} />}
+          {/* CARD 3 */}
+          {inB && !inC && (
+            <div style={{ position: 'absolute', bottom: BOTTOM, left: smR_left_px, width: `${SM_VW}vw`, height: `${SM_VH}vh`, overflow: 'visible', zIndex: 22, pointerEvents: 'none' }}>
+              <div style={{ position: 'absolute', bottom: 0, right: 0, width: `${c3_app_W}vw`, height: `${c3_app_H}vh`, borderRadius: c3_app_R, overflow: 'hidden', background: '#140505', pointerEvents: 'auto', willChange: 'width, height' }}>
+                {image3Src && <img src={image3Src} alt="" loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', display: 'block' }} />}
+              </div>
             </div>
-          </div>
-        )}
-        {inC && (
-          <div style={{ position: 'absolute', bottom: `${btm_px}px`, left: `${c3_left}px`, width: `${c3_W}vw`, height: `${c3_H}vh`, borderRadius: c3_R, zIndex: 22, overflow: 'hidden', background: '#140505', willChange: 'width, height, left' }}>
-            {image3Src && <img src={image3Src} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', display: 'block' }} loading="lazy" />}
-          </div>
-        )}
+          )}
+          {inC && (
+            <div style={{ position: 'absolute', bottom: `${btm_px}px`, left: `${c3_left}px`, width: `${c3_W}vw`, height: `${c3_H}vh`, borderRadius: c3_R, zIndex: 22, overflow: 'hidden', background: '#140505', willChange: 'width, height, left' }}>
+              {image3Src && <img src={image3Src} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', display: 'block' }} loading="lazy" />}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
@@ -394,12 +405,12 @@ export default function CenteredCardAnimation(props: Partial<CardAnimationProps>
   }, []);
 
   const allProps: CardAnimationProps = {
-    heading:         props.heading         ?? 'Turn Every Transaction Into Growth',
-    leftText:        props.leftText        ?? 'Experience GmaxEpay',
+    heading:         props.heading         ?? 'Your Journey to Better Health Starts Here',
+    leftText:        props.leftText        ?? 'Veesha Wellness Experience',
     rightText:       props.rightText       ?? "",
-    bodyText:        props.bodyText        ?? "GmaxEpay is dedicated to making digital payment systems accessible, affordable, and secure for everyone. We provide innovative solutions that support both B2B and B2C transactions, ensuring speed, reliability, and cost efficiency.In a rapidly growing fintech landscape, we stand at the forefront by offering seamless payment services with added benefits like instant rewards. Our focus is not just on technology, but on creating real impact—especially for individuals and businesses that are still underserved by traditional banking systems.",
-    bodyText2:       props.bodyText2       ?? "To simplify and democratize digital payments across India by providing fast, secure, and low-cost financial solutions.We strive to bridge the gap between technology and accessibility, empowering users in rural and semi-urban areas and promoting financial inclusion.",
-    bodyText3:       props.bodyText3       ?? "To build a digitally empowered nation where seamless financial transactions are a part of everyday life.We aim to expand digital payments across the country, connect communities, and contribute to India's growth as a global fintech leader.",
+    bodyText:        props.bodyText        ?? "Established in 2007 under the visionary leadership of Managing partner Dr.Hari Shankaara Nayak,VWPL pharma has emerged as a leading pharmaceutical conglomerate. With a strong focus on innovation, quality, and customer satisfaction, we have set new benchmarks in the industry as a trusted manufacturer, exporter, and government tenderers and Four mfg units with EUGMP and PIC's certificate",
+    bodyText2:       props.bodyText2       ?? "At vlpl pharma, we envision Global Pharmaceutical Leadership through innovation, creativity, and an unwavering commitment to enhancing patient lives. Our focus on science and medicine dudevelop superior, differentiated products that address patient requirements.",
+    bodyText3:       props.bodyText3       ?? "Our vision is to deliver compassionate, high-quality medical care through trusted expertise and advanced healthcare solutions. We are committed to providing safe, reliable, and patient-centered healthcare that contributes to a healthier tomorrow. By integrating modern medical technology with a human touch, we aim to support individuals at every stage of life. We strive to be a trusted partner in every healthcare journey, upholding excellence, integrity, and personalized care, while ensuring accessible and quality healthcare for all.",
     ctaText:         props.ctaText         ?? 'About Us',
     ctaText2:        props.ctaText2        ?? 'Mission',
     ctaText3:        props.ctaText3        ?? 'Vision',
