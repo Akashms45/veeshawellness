@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { TransitionLink } from "./page-transition";
 import { Globe, Camera, Send, Users, Heart } from "lucide-react";
 
 export default function Footer() {
@@ -8,14 +8,14 @@ export default function Footer() {
         <div className="grid lg:grid-cols-4 gap-12 mb-16">
           {/* Brand Info */}
           <div className="lg:col-span-1">
-            <Link href="/" className="flex items-center gap-2 mb-6">
+            <TransitionLink href="/" className="flex items-center gap-2 mb-6">
               <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-white font-bold text-xl">
                 V
               </div>
               <span className="font-display font-bold text-2xl tracking-tight text-foreground">
                 Veesha<span className="text-primary">Wellness</span>
               </span>
-            </Link>
+            </TransitionLink>
             <p className="text-muted leading-relaxed mb-8">
               Your trusted partner in health and wellness. Providing high-quality medications and expert care for over a decade.
             </p>
@@ -39,13 +39,21 @@ export default function Footer() {
           <div>
             <h4 className="font-bold text-lg mb-6 text-foreground">Quick Links</h4>
             <ul className="space-y-4">
-              {["Home", "About Us", "Our Products", "Testimonials", "Contact Us"].map((link) => (
-                <li key={link}>
-                  <a href={`#${link.toLowerCase().replace(" ", "")}`} className="text-muted hover:text-primary transition-colors">
-                    {link}
-                  </a>
-                </li>
-              ))}
+              {["Home", "About Us", "Our Products", "Testimonials", "Contact Us"].map((link) => {
+                const id = link.toLowerCase().replace(" ", "");
+                const sectionId = id === "home" ? "home" : id;
+                return (
+                  <li key={link}>
+                    <TransitionLink 
+                      href="/" 
+                      sectionId={sectionId}
+                      className="text-muted hover:text-primary transition-colors"
+                    >
+                      {link}
+                    </TransitionLink>
+                  </li>
+                );
+              })}
             </ul>
           </div>
 

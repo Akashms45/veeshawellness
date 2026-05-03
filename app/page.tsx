@@ -6,11 +6,13 @@ import GallerySection from "@/components/GallerySection";
 import Testimonials from "@/components/Testimonials";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
+import ScrollToTop from "@/components/ScrollToTop";
 
 export default function Home() {
   return (
     <>
       <Navbar />
+      <ScrollToTop />
       <main>
         <Hero />
         <About />

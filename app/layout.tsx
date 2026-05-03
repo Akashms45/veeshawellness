@@ -17,6 +17,8 @@ export const metadata: Metadata = {
   description: "Experience premium healthcare and wellness services at Veesha Wellness. High-quality medicines, healthcare products, and expert consultations.",
 };
 
+import { PageTransitionProvider, PageTransitionOverlay } from "@/components/page-transition";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -27,7 +29,12 @@ export default function RootLayout({
       lang="en"
       className={`${inter.variable} ${outfit.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <PageTransitionProvider>
+          <PageTransitionOverlay />
+          {children}
+        </PageTransitionProvider>
+      </body>
     </html>
   );
 }

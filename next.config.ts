@@ -1,6 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  turbopack: {
+    root: "c:/Users/Sagar M S/Desktop/veeshawellness",
+  },
   async rewrites() {
     return [
       { source: '/about', destination: '/' },

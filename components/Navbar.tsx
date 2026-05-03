@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, Suspense } from "react";
 import Link from "next/link";
+import { usePageTransition, TransitionLink } from "./page-transition";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 
@@ -73,12 +74,16 @@ function NavbarContent() {
     return () => observer.disconnect();
   }, [pathname]);
 
+  const { phase } = usePageTransition();
+
   // Scroll to section on path change
   useEffect(() => {
+    // If we're in a page transition, let the transition provider handle the scroll
+    if (phase !== "idle") return;
+
     // If the pathname change was just triggered by our scroll observer, don't jump
     if (pathname === lastPathFromScroll.current) {
       // Clear it so that a future Navbar click to the same path will work
-      // (though pathname won't change if it's the same, so this effect wouldn't run anyway)
       return;
     }
 
@@ -99,7 +104,7 @@ function NavbarContent() {
         });
       }
     }
-  }, [pathname]);
+  }, [pathname, phase]);
 
   return (
     <nav
@@ -108,28 +113,35 @@ function NavbarContent() {
       } ${hidden ? "-translate-y-full" : "translate-y-0"}`}
     >
       <div className="container mx-auto px-6 flex justify-between items-center">
-        <Link 
+        <TransitionLink 
           href="/" 
           className="flex items-center gap-2 group"
           onClick={() => { lastPathFromScroll.current = null; }}
         >
           <img src="/logo.svg" alt="Veesha Wellness" className="h-10 md:h-12 w-auto object-contain" />
-        </Link>
+        </TransitionLink>
 
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-8">
-          {navLinks.map((link) => (
-            <Link
-              key={link.name}
-              href={link.href}
-              onClick={() => { lastPathFromScroll.current = null; }}
-              className={`text-foreground/80 hover:text-primary font-medium transition-colors ${
-                pathname === link.href ? "text-primary font-bold" : ""
-              }`}
-            >
-              {link.name}
-            </Link>
-          ))}
+          {navLinks.map((link) => {
+            const isSection = link.href.startsWith("/") && link.href !== "/" && !link.href.includes("/our-sku");
+            const href = isSection ? "/" : link.href;
+            const sectionId = isSection ? link.href.substring(1) : (link.href === "/" ? "home" : undefined);
+            
+            return (
+              <TransitionLink
+                key={link.name}
+                href={href}
+                sectionId={sectionId}
+                onClick={() => { lastPathFromScroll.current = null; }}
+                className={`text-foreground/80 hover:text-primary font-medium transition-colors ${
+                  pathname === link.href ? "text-primary font-bold" : ""
+                }`}
+              >
+                {link.name}
+              </TransitionLink>
+            );
+          })}
         </div>
 
         {/* Mobile Menu Toggle */}
@@ -144,21 +156,28 @@ function NavbarContent() {
       {/* Mobile Nav */}
       {isOpen && (
         <div className="md:hidden glass absolute top-full left-0 w-full p-6 flex flex-col gap-4 shadow-xl animate-in slide-in-from-top-2 duration-300">
-          {navLinks.map((link) => (
-            <Link
-              key={link.name}
-              href={link.href}
-              className={`text-lg font-medium py-2 border-b border-border/50 ${
-                pathname === link.href ? "text-primary" : "text-foreground/90"
-              }`}
-              onClick={() => {
-                lastPathFromScroll.current = null;
-                setIsOpen(false);
-              }}
-            >
-              {link.name}
-            </Link>
-          ))}
+          {navLinks.map((link) => {
+            const isSection = link.href.startsWith("/") && link.href !== "/" && !link.href.includes("/our-sku");
+            const href = isSection ? "/" : link.href;
+            const sectionId = isSection ? link.href.substring(1) : (link.href === "/" ? "home" : undefined);
+
+            return (
+              <TransitionLink
+                key={link.name}
+                href={href}
+                sectionId={sectionId}
+                className={`text-lg font-medium py-2 border-b border-border/50 ${
+                  pathname === link.href ? "text-primary" : "text-foreground/90"
+                }`}
+                onClick={() => {
+                  lastPathFromScroll.current = null;
+                  setIsOpen(false);
+                }}
+              >
+                {link.name}
+              </TransitionLink>
+            );
+          })}
         </div>
       )}
     </nav>

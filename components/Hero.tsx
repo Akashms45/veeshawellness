@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { ArrowRight, ShieldCheck, Truck, Clock } from "lucide-react";
 import { motion } from "framer-motion";
+import { TransitionLink } from "./page-transition";
 
 export default function Hero() {
   return (
@@ -30,18 +31,20 @@ export default function Hero() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 mb-12">
-            <a
-              href="#products"
+            <TransitionLink
+              href="/"
+              sectionId="products"
               className="bg-primary hover:bg-primary-hover text-white px-8 py-4 rounded-2xl font-bold text-lg flex items-center justify-center gap-2 transition-all shadow-xl shadow-primary/20 hover:shadow-primary/40 active:scale-95"
             >
               Shop Now <ArrowRight size={20} />
-            </a>
-            <a
-              href="#about"
+            </TransitionLink>
+            <TransitionLink
+              href="/"
+              sectionId="about"
               className="bg-white border-2 border-primary/20 hover:border-primary text-primary px-8 py-4 rounded-2xl font-bold text-lg flex items-center justify-center transition-all active:scale-95"
             >
               Learn More
-            </a>
+            </TransitionLink>
           </div>
 
           <div className="grid grid-cols-3 gap-6 pt-8 border-t border-border">

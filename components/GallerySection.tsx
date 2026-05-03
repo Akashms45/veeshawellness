@@ -3,6 +3,8 @@
 import React, { useRef, useState, useEffect } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useRouter } from "next/navigation";
+import { usePageTransition } from "./page-transition";
 import { GALLERY_PROJECTS } from "./gallerydata";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -138,9 +140,11 @@ interface CardFaceProps {
 }
 
 function CardFace({ card }: CardFaceProps) {
+  const { navigateTo } = usePageTransition();
   if (card.isCta) {
     return (
       <div
+        onClick={() => navigateTo('/our-sku')}
         style={{
           width: "100%",
           height: "100%",
@@ -151,11 +155,11 @@ function CardFace({ card }: CardFaceProps) {
           justifyContent: "center",
           gap: 16,
           padding: "0 28px",
+          cursor: "pointer",
         }}
       >
-        {/* Trophy / certificate icon */}
         <div style={{ fontSize: "clamp(2rem,6vw,3rem)", lineHeight: 1 }}>
-          🏆
+          📦
         </div>
 
         <h2
@@ -169,28 +173,10 @@ function CardFace({ card }: CardFaceProps) {
             margin: 0,
           }}
         >
-          Certified
+          View All
           <br />
-          Excellence
+          Products
         </h2>
-
-        {/* <p
-        style={{
-          fontFamily: "system-ui, sans-serif",
-          fontSize: "clamp(0.65rem,1.2vw,0.78rem)",
-          color: "rgba(255,255,255,0.85)",
-          textAlign: "center",
-          lineHeight: 1.55,
-          margin: 0,
-          maxWidth: 180,
-        }}
-      >
-        WHO‑GMP Certified · ISO 9001:2015
-        <br />
-        FSSAI Licensed · AYUSH Approved
-        <br />
-        Proud recipients of pharma quality awards
-      </p> */}
       </div>
     );
   }
