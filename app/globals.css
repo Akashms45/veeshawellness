@@ -30,7 +30,7 @@
 }
 
 html {
-  scroll-behavior: smooth;
+  /* scroll-behavior: smooth; */ /* Removed to prevent conflicts with GSAP ScrollTrigger */
 }
 
 body {
