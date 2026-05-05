@@ -426,7 +426,7 @@ export default function GallerySection() {
           <div
             style={{
               position: "absolute",
-              top: isMobile ? 16 : 31,
+              top: isMobile ? 80 : 100,
               left: isMobile ? 0 : -30,
               right: 0,
               zIndex: 40,
@@ -457,7 +457,7 @@ export default function GallerySection() {
                   position: "relative",
                   zIndex: 30,
                   width: "100%",
-                  padding: "72px 1.2rem 12px",
+                  padding: "130px 1.2rem 12px",
                   flexShrink: 0,
                 }}
               >

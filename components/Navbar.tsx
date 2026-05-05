@@ -15,6 +15,7 @@ const navLinks = [
 ];
 
 function NavbarContent() {
+  const { phase } = usePageTransition();
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
@@ -49,6 +50,9 @@ function NavbarContent() {
     };
 
     const handleIntersect = (entries: IntersectionObserverEntry[]) => {
+      // Don't update URL during a transition to prevent "jumping back"
+      if (phase !== "idle") return;
+
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           const id = entry.target.id;
@@ -72,9 +76,8 @@ function NavbarContent() {
     });
 
     return () => observer.disconnect();
-  }, [pathname]);
+  }, [pathname, phase]);
 
-  const { phase } = usePageTransition();
 
   // Scroll to section on path change
   useEffect(() => {
@@ -83,16 +86,20 @@ function NavbarContent() {
 
     // If the pathname change was just triggered by our scroll observer, don't jump
     if (pathname === lastPathFromScroll.current) {
-      // Clear it so that a future Navbar click to the same path will work
       return;
     }
 
     const id = pathname === '/' ? 'home' : pathname.substring(1);
     const validIds = navLinks.map(l => l.href === '/' ? 'home' : l.href.substring(1));
 
+    // Special case for home - only scroll to top if we are NOT already on the home page
+    // and the pathname actually changed to '/'. This prevents jumping back to top 
+    // when a transition to a section on the same page completes.
     if (id === "home") {
-      window.scrollTo({ top: 0, behavior: "instant" });
-      return;
+      // Check if we are already near the top or if this is a fresh page load/navigation
+      // If we are at the home page and not in a transition, we usually don't want to 
+      // force a scroll to 0 unless it's a specific "Home" link click which TransitionLink handles.
+      return; 
     }
 
     if (id && validIds.includes(id)) {
@@ -108,78 +115,83 @@ function NavbarContent() {
 
   return (
     <nav
-      className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-        scrolled ? "glass py-3 shadow-sm" : "bg-transparent py-5"
-      } ${hidden ? "-translate-y-full" : "translate-y-0"}`}
+      className={`fixed top-0 w-full z-50 transition-all duration-700 ease-in-out delay-150 ${
+        hidden ? "-translate-y-full opacity-0" : "translate-y-0 opacity-100"
+      }`}
     >
-      <div className="container mx-auto px-6 flex justify-between items-center">
-        <TransitionLink 
-          href="/" 
-          className="flex items-center gap-2 group"
-          onClick={() => { lastPathFromScroll.current = null; }}
-        >
-          <img src="/logo.svg" alt="Veesha Wellness" className="h-10 md:h-12 w-auto object-contain" />
-        </TransitionLink>
+      <div className={`container mx-auto px-4 mt-6 transition-all duration-300`}>
+        <div className={`flex items-center justify-between px-10 py-3.5 rounded-full bg-white shadow-lg border border-border/50 max-w-[1400px] mx-auto w-full`}>
+          {/* Logo */}
+          <TransitionLink 
+            href="/" 
+            className="flex items-center gap-2 shrink-0"
+            onClick={() => { lastPathFromScroll.current = null; }}
+          >
+            <img src="/logo.svg" alt="Veesha Wellness" className="h-9 md:h-11 w-auto object-contain" />
+          </TransitionLink>
 
-        {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-8">
-          {navLinks.map((link) => {
-            const isSection = link.href.startsWith("/") && link.href !== "/" && !link.href.includes("/our-sku");
-            const href = isSection ? "/" : link.href;
-            const sectionId = isSection ? link.href.substring(1) : (link.href === "/" ? "home" : undefined);
-            
-            return (
-              <TransitionLink
-                key={link.name}
-                href={href}
-                sectionId={sectionId}
-                onClick={() => { lastPathFromScroll.current = null; }}
-                className={`text-foreground/80 hover:text-primary font-medium transition-colors ${
-                  pathname === link.href ? "text-primary font-bold" : ""
-                }`}
-              >
-                {link.name}
-              </TransitionLink>
-            );
-          })}
+          {/* Desktop Nav Links (Right Side) */}
+          <div className="hidden md:flex items-center gap-12">
+            {navLinks.map((link) => {
+              const isSection = link.href.startsWith("/") && link.href !== "/" && !link.href.includes("/our-sku");
+              const href = isSection ? "/" : link.href;
+              const sectionId = isSection ? link.href.substring(1) : (link.href === "/" ? "home" : undefined);
+              
+              return (
+                <TransitionLink
+                  key={link.name}
+                  href={href}
+                  sectionId={sectionId}
+                  onClick={() => { lastPathFromScroll.current = null; }}
+                  className={`text-[13px] font-bold tracking-widest uppercase transition-colors underline-offset-8 hover:underline ${
+                    pathname === link.href ? "underline decoration-2" : "text-foreground/70"
+                  }`}
+                  style={{ color: pathname === link.href ? '#386BB4' : undefined }}
+                >
+                  {link.name}
+                </TransitionLink>
+              );
+            })}
+          </div>
+
+          {/* Mobile Menu Toggle */}
+          <button
+            className="md:hidden text-foreground p-1"
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            {isOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
         </div>
 
-        {/* Mobile Menu Toggle */}
-        <button
-          className="md:hidden text-foreground"
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          {isOpen ? <X size={28} /> : <Menu size={28} />}
-        </button>
+        {/* Mobile Nav */}
+        {isOpen && (
+          <div className="md:hidden bg-white mt-4 rounded-3xl p-8 flex flex-col gap-6 shadow-2xl border border-border animate-in slide-in-from-top-4 duration-300">
+            {navLinks.map((link) => {
+              const isSection = link.href.startsWith("/") && link.href !== "/" && !link.href.includes("/our-sku");
+              const href = isSection ? "/" : link.href;
+              const sectionId = isSection ? link.href.substring(1) : (link.href === "/" ? "home" : undefined);
+
+              return (
+                <TransitionLink
+                  key={link.name}
+                  href={href}
+                  sectionId={sectionId}
+                  className={`text-xl font-black ${
+                    pathname === link.href ? "" : "text-foreground/90"
+                  }`}
+                  style={{ color: pathname === link.href ? '#386BB4' : undefined }}
+                  onClick={() => {
+                    lastPathFromScroll.current = null;
+                    setIsOpen(false);
+                  }}
+                >
+                  {link.name}
+                </TransitionLink>
+              );
+            })}
+          </div>
+        )}
       </div>
-
-      {/* Mobile Nav */}
-      {isOpen && (
-        <div className="md:hidden glass absolute top-full left-0 w-full p-6 flex flex-col gap-4 shadow-xl animate-in slide-in-from-top-2 duration-300">
-          {navLinks.map((link) => {
-            const isSection = link.href.startsWith("/") && link.href !== "/" && !link.href.includes("/our-sku");
-            const href = isSection ? "/" : link.href;
-            const sectionId = isSection ? link.href.substring(1) : (link.href === "/" ? "home" : undefined);
-
-            return (
-              <TransitionLink
-                key={link.name}
-                href={href}
-                sectionId={sectionId}
-                className={`text-lg font-medium py-2 border-b border-border/50 ${
-                  pathname === link.href ? "text-primary" : "text-foreground/90"
-                }`}
-                onClick={() => {
-                  lastPathFromScroll.current = null;
-                  setIsOpen(false);
-                }}
-              >
-                {link.name}
-              </TransitionLink>
-            );
-          })}
-        </div>
-      )}
     </nav>
   );
 }

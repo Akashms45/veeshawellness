@@ -16,7 +16,7 @@ export const GALLERY_PROJECTS = [
     description:
       "Awarded for excellence in customer service, professional ethics, and trusted pharmaceutical care.",
     image: "/gallery2.jpeg",
-    color: "#81C784",
+    color: "#386BB4",
     services: ["Customer Excellence"],
   },
   {
@@ -46,7 +46,7 @@ export const GALLERY_PROJECTS = [
     description:
       "Certified for meeting strict health, hygiene, and safety standards within pharmaceutical operations.",
     image: "/gallery5.webp",
-    color: "#80CBC4",
+    color: "#2D5691",
     services: ["Health & Safety"],
   },
 ];

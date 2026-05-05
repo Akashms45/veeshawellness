@@ -63,8 +63,7 @@ export function PageTransitionProvider({ children }: { children: ReactNode }) {
           if (sectionId) {
             const el = document.getElementById(sectionId);
             if (el) {
-              const top = el.getBoundingClientRect().top + window.pageYOffset;
-              window.scrollTo({ top: Math.max(0, top - NAVBAR_H), behavior: "instant" });
+              el.scrollIntoView({ behavior: "instant", block: "start" });
             } else {
               window.scrollTo({ top: 0, behavior: "instant" });
             }

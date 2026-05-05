@@ -51,7 +51,7 @@ function MobileCardItem({ image, body, cta, backgroundColor }: MobileCardItemPro
   return (
     <div ref={ref} style={{
       display: 'flex', flexDirection: 'column', alignItems: 'center',
-      gap: '5vw', width: '100%', padding: '10vw 0 14vw', backgroundColor,
+      gap: '5vw', width: '100%', padding: '14vh 0 14vw', backgroundColor,
     }}>
       <div style={{
         width: `${cardW}vw`, height: `${cardH}vw`, borderRadius: cardR,
@@ -118,8 +118,8 @@ function MobileCardAnimation({
   ];
 
   return (
-    <div style={{ width: '100%', backgroundColor, fontFamily: 'var(--font-sans)' }}>
-      <div style={{ padding: '8vh 6vw 4vh', textAlign: 'center' }}>
+    <div id="about" style={{ width: '100%', backgroundColor, fontFamily: 'var(--font-sans)' }}>
+      <div style={{ padding: '14vh 6vw 4vh', textAlign: 'center' }}>
         <h1 style={{ margin: 0, fontSize: 'clamp(1.9rem, 8vw, 3rem)', fontWeight: 900, color: '#140505', lineHeight: 1.1, letterSpacing: '-0.025em' }}>
           {heading}
         </h1>
@@ -267,7 +267,7 @@ function DesktopCardAnimation({
           fontFamily: 'var(--font-sans)',
         }}>
           <div style={{
-            position: 'absolute', top: '3vh', left: 0, right: 0,
+            position: 'absolute', top: '12vh', left: 0, right: 0,
             zIndex: 10, pointerEvents: 'none', userSelect: 'none',
             opacity: hOpacity,
             transform: `translateY(${hSlide}px)`,
