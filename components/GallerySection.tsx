@@ -8,7 +8,7 @@ import { GALLERY_PROJECTS } from "./gallerydata";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const PINK = "#E91E8C";
+const PRIMARY_BLUE = "#386BB4";
 const N = GALLERY_PROJECTS.length;
 
 const ALL_ITEMS = [
@@ -16,7 +16,7 @@ const ALL_ITEMS = [
   {
     id: "cta",
     isCta: true,
-    color: PINK,
+    color: PRIMARY_BLUE,
     name: "",
     description: "",
     services: [] as string[],
@@ -138,12 +138,12 @@ function CardFace({ card }: CardFaceProps) {
   const { navigateTo } = usePageTransition();
   if (card.isCta) {
     return (
-      <TransitionLink
-        href="/allproducts"
+      <div
+        onClick={() => navigateTo("/allproducts")}
         style={{
           width: "100%",
           height: "100%",
-          background: PINK,
+          background: PRIMARY_BLUE,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -151,13 +151,12 @@ function CardFace({ card }: CardFaceProps) {
           gap: 16,
           padding: "0 28px",
           cursor: "pointer",
-          textDecoration: "none",
         }}
       >
         <div style={{ fontSize: "clamp(2rem,6vw,3rem)", lineHeight: 1 }}>📦</div>
         <h2
           style={{
-            fontFamily: "'Impact','Anton', sans-serif",
+            fontFamily: "var(--font-display), serif",
             fontSize: "clamp(1.4rem,4vw,2.2rem)",
             color: "#fff",
             textTransform: "uppercase",
@@ -170,7 +169,7 @@ function CardFace({ card }: CardFaceProps) {
           <br />
           Products
         </h2>
-      </TransitionLink>
+      </div>
     );
   }
   return (
@@ -207,7 +206,7 @@ function CardFace({ card }: CardFaceProps) {
       >
         <h2
           style={{
-            fontFamily: "Impact,'Anton','Arial Black',sans-serif",
+            fontFamily: "var(--font-display), serif",
             fontSize: "clamp(1.5rem,4vw,2.8rem)",
             color: "#fff",
             textTransform: "uppercase",
@@ -270,19 +269,7 @@ export default function GallerySection() {
       }
       gsap.set(bg, { backgroundColor: ALL_ITEMS[0].color });
 
-      // Heading reveal observer
-      if (headingRef.current) {
-        const obs = new IntersectionObserver(
-          ([entry]) => {
-            if (entry.isIntersecting) {
-              headingRef.current!.classList.add("animate-in");
-              obs.disconnect();
-            }
-          },
-          { threshold: 0.3 },
-        );
-        obs.observe(headingRef.current);
-      }
+
 
       masterTl = gsap.timeline({ paused: true });
 
@@ -434,18 +421,19 @@ export default function GallerySection() {
               padding: `0 ${isMobile ? "1.2rem" : "clamp(1.5rem,4vw,4.5rem)"}`,
             }}
           >
-            <div ref={headingRef} className="gs-reveal-heading">
+            <div>
               <h2
                 style={{
-                  fontFamily: "'Impact','Anton', sans-serif",
+                  fontFamily: "var(--font-display), serif",
                   fontSize: "clamp(2rem, 7vw, 4.5rem)",
                   color: "#0E101E",
                   textTransform: "uppercase",
                   margin: 0,
                   lineHeight: 1.1,
+                  opacity: 1,
                 }}
               >
-                Gallery
+                Products
               </h2>
             </div>
           </div>
@@ -466,7 +454,7 @@ export default function GallerySection() {
                   key={`title-${animKey}`}
                   text={active.title ?? ""}
                   style={{
-                    fontFamily: "'Impact','Anton', sans-serif",
+                    fontFamily: "var(--font-display), serif",
                     fontSize: "clamp(1.8rem,8vw,3rem)",
                     color: "#fff",
                     textTransform: "uppercase",
@@ -480,7 +468,7 @@ export default function GallerySection() {
                   key={`desc-${animKey}`}
                   text={active.description ?? ""}
                   style={{
-                    fontFamily: "'grift-medium',sans-serif",
+                    fontFamily: "var(--font-sans), serif",
                     fontSize: "clamp(0.7rem,3vw,0.85rem)",
                     color: "rgba(255,255,255,0.78)",
                     lineHeight: 1.5,
@@ -494,6 +482,7 @@ export default function GallerySection() {
                     <div
                       key={p.id}
                       style={{
+                        pointerEvents: (i === activeIdx || i === N - 1) ? "auto" : "none",
                         width: i === activeIdx ? 38 : 34,
                         height: i === activeIdx ? 38 : 34,
                         borderRadius: "50%",
@@ -504,7 +493,7 @@ export default function GallerySection() {
                         zIndex: i === activeIdx ? 10 : N - i,
                         border:
                           i === activeIdx
-                            ? `2px solid ${PINK}`
+                            ? `2px solid #386BB4`
                             : "2px solid rgba(255,255,255,0.2)",
                         transition: "all 0.3s",
                         background: p.color,
@@ -554,6 +543,7 @@ export default function GallerySection() {
                       background: item.color,
                       boxShadow: "0 6px 24px rgba(0,0,0,0.2)",
                       zIndex: i,
+                      pointerEvents: (i === activeIdx || i === TOTAL - 1) ? "auto" : "none",
                       willChange: "transform",
                     }}
                   >
@@ -595,7 +585,7 @@ export default function GallerySection() {
                   key={`title-${animKey}`}
                   text={active.title ?? ""}
                   style={{
-                    fontFamily: "'Impact','Anton', sans-serif",
+                    fontFamily: "var(--font-display), serif",
                     fontSize: isTablet
                       ? "clamp(1rem, 2vw, 1.6rem)"
                       : "clamp(1.4rem, 2.8vw, 2.8rem)",
@@ -611,7 +601,7 @@ export default function GallerySection() {
                   key={`desc-${animKey}`}
                   text={active.description ?? ""}
                   style={{
-                    fontFamily: "girft-medium",
+                    fontFamily: "var(--font-sans), serif",
                     fontSize: isTablet
                       ? "clamp(0.7rem,1.2vw,0.85rem)"
                       : "clamp(0.75rem,1.1vw,0.9rem)",
@@ -638,13 +628,13 @@ export default function GallerySection() {
                         zIndex: i === activeIdx ? 10 : N - i,
                         border:
                           i === activeIdx
-                            ? `2.5px solid ${PINK}`
+                            ? `2.5px solid #386BB4`
                             : "2.5px solid rgba(255,255,255,0.2)",
                         transition:
                           "width 0.3s, height 0.3s, border-color 0.3s, box-shadow 0.3s",
                         boxShadow:
                           i === activeIdx
-                            ? `0 0 0 2px ${PINK}55, 0 3px 10px rgba(0,0,0,0.35)`
+                            ? `0 0 0 2.5px #386BB455, 0 3px 10px rgba(0,0,0,0.35)`
                             : "0 1px 4px rgba(0,0,0,0.25)",
                         background: p.color,
                       }}
@@ -694,6 +684,7 @@ export default function GallerySection() {
                       boxShadow: "0 6px 14px rgba(0,0,0,0.12)",
                       zIndex: i,
                       willChange: "transform",
+                      pointerEvents: (i === activeIdx || i === TOTAL - 1) ? "auto" : "none",
                     }}
                   >
                     <CardFace card={item} />

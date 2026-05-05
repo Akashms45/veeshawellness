@@ -130,7 +130,7 @@ function NavbarContent() {
                   href={href}
                   sectionId={sectionId}
                   onClick={() => { lastPathFromScroll.current = null; }}
-                  className={`text-[11px] lg:text-[13px] font-bold tracking-widest uppercase transition-colors underline-offset-8 hover:underline whitespace-nowrap ${
+                  className={`text-[11px] lg:text-[13px] font-bold tracking-widest uppercase transition-colors underline-offset-8 hover:underline whitespace-nowrap font-sans ${
                     isActive ? "underline decoration-2" : "text-foreground/70"
                   }`}
                   style={{ color: isActive ? "#386BB4" : undefined }}
@@ -181,7 +181,7 @@ function NavbarContent() {
                 key={link.name}
                 href={href}
                 sectionId={sectionId}
-                className={`flex items-center justify-between py-3.5 px-2 text-lg sm:text-xl font-black border-b border-gray-100 last:border-0 transition-colors rounded-lg hover:bg-gray-50 ${
+                className={`flex items-center justify-between py-3.5 px-2 text-lg sm:text-xl font-black border-b border-gray-100 last:border-0 transition-colors rounded-lg hover:bg-gray-50 font-sans ${
                   isActive ? "" : "text-foreground/80"
                 }`}
                 style={{

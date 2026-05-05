@@ -118,9 +118,9 @@ function MobileCardAnimation({
   ];
 
   return (
-    <div id="about" style={{ width: '100%', backgroundColor, fontFamily: 'var(--font-sans)' }}>
+    <div id="about" style={{ width: '100%', backgroundColor, fontFamily: 'var(--font-sans), serif' }}>
       <div style={{ padding: '14vh 6vw 4vh', textAlign: 'center' }}>
-        <h1 style={{ margin: 0, fontSize: 'clamp(1.9rem, 8vw, 3rem)', fontWeight: 900, color: '#140505', lineHeight: 1.1, letterSpacing: '-0.025em' }}>
+        <h1 style={{ margin: 0, fontSize: 'clamp(1.9rem, 8vw, 3rem)', fontWeight: 800, color: '#140505', lineHeight: 1.1, letterSpacing: '-0.025em', fontFamily: 'var(--font-display), serif' }}>
           {heading}
         </h1>
       </div>
@@ -264,7 +264,7 @@ function DesktopCardAnimation({
           position: 'absolute', top: 0, left: 0, width: '100%', height: '100vh',
           backgroundColor,
           overflow: 'hidden',
-          fontFamily: 'var(--font-sans)',
+          fontFamily: 'var(--font-sans), serif',
         }}>
           <div style={{
             position: 'absolute', top: '12vh', left: 0, right: 0,
@@ -278,7 +278,7 @@ function DesktopCardAnimation({
               paddingLeft: '20%',
               fontSize: 'clamp(2rem, 5.2vw, 5.6rem)',
               fontWeight: 800,
-              fontFamily: 'var(--font-display)',
+              fontFamily: 'var(--font-display), serif',
               color: '#140505',
               lineHeight: 1.05,
               letterSpacing: '-0.025em',
@@ -289,7 +289,7 @@ function DesktopCardAnimation({
               paddingLeft: '50%',
               fontSize: 'clamp(2rem, 5.2vw, 5.6rem)',
               fontWeight: 800,
-              fontFamily: 'var(--font-display)',
+              fontFamily: 'var(--font-display), serif',
               color: '#140505',
               lineHeight: 1.05,
               letterSpacing: '-0.025em',
@@ -417,7 +417,7 @@ export default function CenteredCardAnimation(props: Partial<CardAnimationProps>
     imageSrc:        props.imageSrc        ?? '/about.webp',
     image2Src:       props.image2Src       ?? '/mission.webp',
     image3Src:       props.image3Src       ?? '/vision.webp',
-    backgroundColor: props.backgroundColor ?? '#F2F2E8',
+    backgroundColor: props.backgroundColor ?? '#f8f8f8',
   };
 
   return isMobile
@@ -451,7 +451,7 @@ const SideText = ({ opacity, slide, body, cta, left, bottom }: SideTextProps) =>
     <p
       style={{
         margin: '0 0 1rem 0',
-        fontFamily: 'var(--font-sans)',
+        fontFamily: 'var(--font-sans), serif',
         fontSize: 'clamp(0.85rem, 1.05vw, 1.05rem)',
         fontWeight: 400,
         color: '#140505',
@@ -463,7 +463,7 @@ const SideText = ({ opacity, slide, body, cta, left, bottom }: SideTextProps) =>
     <button
       style={{
         all: 'unset',
-        fontFamily: 'var(--font-display)',
+        fontFamily: 'var(--font-display), serif',
         fontSize: '1.25rem',
         fontWeight: 800,
         color: '#140505',

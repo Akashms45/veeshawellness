@@ -1,20 +1,32 @@
 import type { Metadata } from "next";
-import { Inter, Outfit } from "next/font/google";
+import { Abhaya_Libre, Lora } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({
+const lora = Lora({
   variable: "--font-sans",
   subsets: ["latin"],
 });
 
-const outfit = Outfit({
+const abhaya = Abhaya_Libre({
   variable: "--font-display",
+  weight: ["800"],
   subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
   title: "Veesha Wellness | Your Trusted Neighborhood Pharmacy",
   description: "Experience premium healthcare and wellness services at Veesha Wellness. High-quality medicines, healthcare products, and expert consultations.",
+  icons: {
+    icon: [
+      { url: "/feviicons/favicon-96x96.png", sizes: "96x96", type: "image/png" },
+      { url: "/feviicons/favicon.svg", type: "image/svg+xml" },
+      { url: "/feviicons/favicon.ico" },
+    ],
+    apple: [
+      { url: "/feviicons/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+    ],
+  },
+  manifest: "/feviicons/site.webmanifest",
 };
 
 import { PageTransitionProvider, PageTransitionOverlay } from "@/components/page-transition";
@@ -27,7 +39,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${outfit.variable} h-full antialiased`}
+      className={`${lora.variable} ${abhaya.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <PageTransitionProvider>

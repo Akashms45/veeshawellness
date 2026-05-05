@@ -56,7 +56,7 @@ export default function Hero() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
                 style={{ willChange: "transform, opacity" }}
-                className="text-sm sm:text-base md:text-lg text-white/70 leading-relaxed mb-6 sm:mb-8 lg:mb-10 max-w-xs sm:max-w-sm md:max-w-lg"
+                className="text-sm sm:text-base md:text-lg text-white/70 leading-relaxed mb-6 sm:mb-8 lg:mb-10 max-w-xs sm:max-w-sm md:max-w-lg font-sans"
               >
                 Reliable tablets, syrups, and wellness products for you and your
                 loved ones
@@ -70,7 +70,7 @@ export default function Hero() {
               >
                 <TransitionLink
                   href="/contact"
-                  className="bg-white hover:bg-gray-100 px-8 sm:px-10 py-3 sm:py-3.5 lg:py-4 rounded-full font-bold text-sm sm:text-base lg:text-lg inline-flex items-center justify-center transition-all shadow-xl active:scale-95"
+                  className="bg-white hover:bg-gray-100 px-8 sm:px-10 py-3 sm:py-3.5 lg:py-4 rounded-full font-bold text-sm sm:text-base lg:text-lg inline-flex items-center justify-center transition-all shadow-xl active:scale-95 font-sans"
                   style={{ color: "#386BB4" }}
                 >
                   Contact Us

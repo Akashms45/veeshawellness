@@ -1,104 +1,117 @@
 import { TransitionLink } from "./page-transition";
-import { Globe, Camera, Send, Users, Heart } from "lucide-react";
+
+const productLinks = [
+  { label: "View All", href: "/allproducts" },
+  { label: "Ayurvedic Products", href: "/allproducts" },
+  { label: "Wellness Kits", href: "/allproducts" },
+  { label: "Daily Supplements", href: "/allproducts" },
+];
+
+const quickLinks = [
+  { label: "Home", href: "/", sectionId: "home" },
+  { label: "About Us", href: "/", sectionId: "about" },
+  { label: "Our Products", href: "/", sectionId: "products" },
+  { label: "Testimonials", href: "/", sectionId: "testimonials" },
+  { label: "Contact Us", href: "/", sectionId: "contact" },
+];
 
 export default function Footer() {
   return (
-    <footer className="bg-slate-50 pt-20 pb-10 border-t border-border/50">
-      <div className="container mx-auto px-6">
-        <div className="grid lg:grid-cols-4 gap-12 mb-16">
-          {/* Brand Info */}
-          <div className="lg:col-span-1">
-            <TransitionLink href="/" className="flex items-center gap-2 mb-6">
-              <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-white font-bold text-xl">
-                V
+    <footer
+      className="relative overflow-hidden font-sans"
+      style={{ backgroundColor: "#f8f8f8" }}
+    >
+      {/* ── Main content grid ── */}
+      <div className="container mx-auto px-4 sm:px-6 lg:px-10 max-w-[75%] lg:max-w-[70%]">
+        <div className="flex flex-col lg:flex-row">
+
+          {/* ── LEFT COLUMN: Logo / Contact / Copyright ── */}
+          <div
+            className="flex flex-col justify-between py-10 sm:py-12 lg:py-14 pr-0 lg:pr-12 xl:pr-16 shrink-0
+                        w-full lg:w-[260px] xl:w-[300px]
+                        border-b lg:border-b-0 lg:border-r border-gray-300/60"
+          >
+            {/* Logo */}
+            <div>
+              <TransitionLink href="/" className="inline-flex items-center gap-2 mb-8 sm:mb-10">
+                <img src="/logo.svg" alt="Veesha Wellness" className="h-10 sm:h-11 w-auto" />
+              </TransitionLink>
+            </div>
+
+            <div className="mt-auto space-y-3">
+              <p className="text-sm text-gray-700">
+                <span className="font-bold text-gray-900">Address: </span>
+                <span className="text-gray-500">
+                  123 Wellness Circle, Health Park, <br />
+                  Mumbai, Maharashtra 400001
+                </span>
+              </p>
+              <p className="text-xs text-gray-500 leading-relaxed">
+                © 2026 Veesha Wellness Pvt Ltd. All rights reserved.
+              </p>
+            </div>
+          </div>
+
+          {/* ── RIGHT SECTION ── */}
+          <div className="flex-1 flex flex-col pl-0 lg:pl-10 xl:pl-14 py-10 sm:py-12 lg:py-14">
+
+            <div className="grid grid-cols-2 gap-8 sm:gap-6">
+
+              {/* Quick Links */}
+              <div>
+                <h4 className="text-sm font-bold text-gray-900 mb-4 sm:mb-5 tracking-wide uppercase">
+                  Menu
+                </h4>
+                <ul className="space-y-2.5 sm:space-y-3">
+                  {quickLinks.map(({ label, href, sectionId }) => (
+                    <li key={label}>
+                      <TransitionLink
+                        href={href}
+                        sectionId={sectionId}
+                        className="text-sm text-gray-500 hover:text-gray-900 transition-colors"
+                      >
+                        {label}
+                      </TransitionLink>
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <span className="font-display font-bold text-2xl tracking-tight text-foreground">
-                Veesha<span className="text-primary">Wellness</span>
-              </span>
-            </TransitionLink>
-            <p className="text-muted leading-relaxed mb-8">
-              Your trusted partner in health and wellness. Providing high-quality medications and expert care for over a decade.
-            </p>
-            <div className="flex gap-4">
-              <a href="#" className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-primary shadow-sm hover:bg-primary hover:text-white transition-all border border-border">
-                <Globe size={18} />
-              </a>
-              <a href="#" className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-primary shadow-sm hover:bg-primary hover:text-white transition-all border border-border">
-                <Camera size={18} />
-              </a>
-              <a href="#" className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-primary shadow-sm hover:bg-primary hover:text-white transition-all border border-border">
-                <Send size={18} />
-              </a>
-              <a href="#" className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-primary shadow-sm hover:bg-primary hover:text-white transition-all border border-border">
-                <Users size={18} />
-              </a>
-            </div>
-          </div>
 
-          {/* Quick Links */}
-          <div>
-            <h4 className="font-bold text-lg mb-6 text-foreground">Quick Links</h4>
-            <ul className="space-y-4">
-              {["Home", "About Us", "Our Products", "Testimonials", "Contact Us"].map((link) => {
-                const id = link.toLowerCase().replace(" ", "");
-                const sectionId = id === "home" ? "home" : id;
-                return (
-                  <li key={link}>
-                    <TransitionLink 
-                      href="/" 
-                      sectionId={sectionId}
-                      className="text-muted hover:text-primary transition-colors"
-                    >
-                      {link}
-                    </TransitionLink>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
+              {/* All Products */}
+              <div>
+                <h4 className="text-sm font-bold text-gray-900 mb-4 sm:mb-5 tracking-wide uppercase">
+                  All Products
+                </h4>
+                <ul className="space-y-2.5 sm:space-y-3">
+                  {productLinks.map(({ label, href }) => (
+                    <li key={label}>
+                      <TransitionLink
+                        href={href}
+                        className="text-sm text-gray-500 hover:text-gray-900 transition-colors"
+                      >
+                        {label}
+                      </TransitionLink>
+                    </li>
+                  ))}
+                </ul>
+              </div>
 
-          {/* Services */}
-          <div>
-            <h4 className="font-bold text-lg mb-6 text-foreground">Services</h4>
-            <ul className="space-y-4">
-              {["Prescription Refill", "Online Consultation", "Home Delivery", "Health Screenings", "Wellness Kits"].map((item) => (
-                <li key={item}>
-                  <a href="#" className="text-muted hover:text-primary transition-colors">
-                    {item}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Newsletter */}
-          <div>
-            <h4 className="font-bold text-lg mb-6 text-foreground">Stay Updated</h4>
-            <p className="text-muted mb-6">Subscribe to our newsletter for health tips and exclusive offers.</p>
-            <div className="relative">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="w-full px-6 py-4 rounded-2xl bg-white border border-border focus:border-primary outline-none"
-              />
-              <button className="absolute right-2 top-2 bottom-2 bg-primary text-white px-4 rounded-xl font-bold hover:bg-primary-hover transition-colors">
-                Join
-              </button>
             </div>
           </div>
         </div>
+      </div>
 
-        <div className="pt-10 border-t border-border/50 flex flex-col md:flex-row justify-between items-center gap-6 text-sm text-muted">
-          <p>© 2026 Veesha Wellness. All rights reserved.</p>
-          <div className="flex gap-8">
-            <a href="#" className="hover:text-primary">Privacy Policy</a>
-            <a href="#" className="hover:text-primary">Terms of Service</a>
-            <a href="#" className="hover:text-primary">Cookie Policy</a>
-          </div>
-          <p className="flex items-center gap-1">
-            Made with <Heart size={14} className="text-red-500 fill-red-500" /> for your health.
-          </p>
-        </div>
+      {/* ── Watermark — bleeds out at the bottom exactly like the reference ── */}
+      <div
+        className="w-full overflow-hidden pointer-events-none select-none border-t border-gray-300/40 mt-2"
+        aria-hidden="true"
+      >
+        <p
+          className="text-[18vw] sm:text-[16vw] font-black leading-[0.82] tracking-tighter uppercase whitespace-nowrap text-center"
+          style={{ color: "rgba(56, 107, 180, 0.08)" }}
+        >
+          VEESHA
+        </p>
       </div>
     </footer>
   );

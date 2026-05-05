@@ -245,7 +245,7 @@ export default function CustomerReviews(): React.JSX.Element {
     nameSz:  fontForAngle(angle, isMobile ? 0.82 : 1.0,  isMobile ? 0.62 : 0.76),
     rateSz:  fontForAngle(angle, isMobile ? 0.68 : 0.78, isMobile ? 0.56 : 0.63),
     nameCol: isMid ? '#140505' : '#aaa',
-    rateCol: isMid ? '#1a7a3a' : '#ccc',
+    rateCol: isMid ? '#386BB4' : '#ccc',
   });
 
   const renderAvatar = (
@@ -302,7 +302,7 @@ export default function CustomerReviews(): React.JSX.Element {
           fontFamily:     'var(--font-sans)',
           position:       'relative',
           overflow:       'hidden',
-          padding:        isMobile ? '0 16px' : '0',
+          padding:        isMobile ? '120px 16px' : '160px 0',
           boxSizing:      'border-box',
         }}
       >
@@ -317,7 +317,7 @@ export default function CustomerReviews(): React.JSX.Element {
               width:        '140vw',
               height:       '100vw',
               borderRadius: '50%',
-              background:   '#5748E2',
+              background:   '#386BB4',
               zIndex:       0,
             }}
           />
@@ -331,7 +331,7 @@ export default function CustomerReviews(): React.JSX.Element {
               width:        '50vh',
               height:       '100vh',
               borderRadius: '0 100vh 100vh 0',
-              background:   '#5748E2',
+              background:   '#386BB4',
               zIndex:       0,
             }}
           />
@@ -358,7 +358,7 @@ export default function CustomerReviews(): React.JSX.Element {
               style={{
                 width: 36,
                 height: 3,
-                background: '#5748E2',
+                background: '#386BB4',
                 borderRadius: 2,
                 marginBottom: 10,
               }}
@@ -411,7 +411,7 @@ export default function CustomerReviews(): React.JSX.Element {
               >
                 <path
                   d={`M 0 0 A ${ARC_BOX / 2} ${ARC_BOX / 2} 0 0 1 0 ${ARC_BOX}`}
-                  stroke="#9d96e8"
+                  stroke="#386BB444"
                   strokeWidth="1.5"
                   strokeLinecap="round"
                   fill="none"
@@ -451,7 +451,7 @@ export default function CustomerReviews(): React.JSX.Element {
                     lineHeight:  0.75,
                     fontWeight:  700,
                     fontStyle:   'normal',
-                    color:       '#140505',
+                    color:       '#386BB4',
                     marginRight: '4px',
                     marginTop:   '6px',
                     fontFamily:  'var(--font-sans)',

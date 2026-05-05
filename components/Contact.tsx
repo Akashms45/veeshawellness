@@ -1,120 +1,180 @@
 "use client";
 
-import { Mail, MapPin, Phone, Send, Clock } from "lucide-react";
+import { Mail, Phone, Send } from "lucide-react";
 
 export default function Contact() {
   return (
-    <section id="contact" className="py-24 bg-mint-50/20">
-      <div className="container mx-auto px-6">
-        <div className="bg-white rounded-[60px] overflow-hidden shadow-2xl border border-border/50">
-          <div className="grid lg:grid-cols-2">
-            {/* Contact Info */}
-            <div className="bg-primary p-12 lg:p-20 text-white relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl" />
+    <section
+      id="contact"
+      className="relative min-h-screen flex items-center py-16 sm:py-20 lg:py-24 overflow-hidden"
+      style={{ backgroundColor: "#386BB4" }}
+    >
+      {/* Subtle radial glow bottom-left */}
+      <div
+        className="absolute bottom-0 left-0 w-[500px] h-[500px] rounded-full pointer-events-none"
+        style={{
+          background: "radial-gradient(circle, rgba(255,255,255,0.04) 0%, transparent 70%)",
+        }}
+      />
+
+      <div className="container mx-auto px-6 sm:px-12 lg:px-24 xl:px-32 w-full">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 xl:gap-24 items-center">
+
+          {/* ── Left: Info ── */}
+          <div className="text-white order-2 lg:order-1">
+            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black leading-[1.1] mb-4 sm:mb-6 tracking-tight font-display">
+              Contact Us
+            </h2>
+            <p className="text-white/60 text-sm sm:text-base leading-relaxed mb-10 sm:mb-14 max-w-sm font-sans">
+              Not sure what you need? The team at Veesha Wellness will be happy
+              to listen to you and suggest the right products you hadn't
+              considered.
+            </p>
+
+            <div className="flex flex-col gap-5 sm:gap-6">
               
-              <h2 className="font-display text-4xl font-bold mb-8 relative z-10">
-                Get In Touch
-              </h2>
-              <p className="text-white/80 text-lg mb-12 relative z-10">
-                Have questions about a prescription or our wellness products? Our team is here to help you 24/7.
-              </p>
-
-              <div className="space-y-8 relative z-10">
-                <div className="flex gap-6 items-center">
-                  <div className="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center border border-white/20">
-                    <Phone size={24} />
-                  </div>
-                  <div>
-                    <p className="text-white/60 text-sm font-bold uppercase tracking-widest">Phone</p>
-                    <p className="text-xl font-bold">+1 (234) 567-890</p>
-                  </div>
+              <a
+                href="mailto:hello@veeshawellness.com"
+                className="flex items-center gap-4 group font-sans"
+              >
+                <div
+                  className="w-10 h-10 rounded-full flex items-center justify-center shrink-0 transition-colors"
+                  style={{ backgroundColor: "rgba(255,255,255,0.12)" }}
+                >
+                  <Mail size={17} className="text-white" />
                 </div>
+                <span className="text-white/80 text-sm sm:text-base group-hover:text-white transition-colors">
+                  hello@veeshawellness.com
+                </span>
+              </a>
 
-                <div className="flex gap-6 items-center">
-                  <div className="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center border border-white/20">
-                    <Mail size={24} />
-                  </div>
-                  <div>
-                    <p className="text-white/60 text-sm font-bold uppercase tracking-widest">Email</p>
-                    <p className="text-xl font-bold">hello@veeshawellness.com</p>
-                  </div>
+              <a href="tel:+12345678900" className="flex items-center gap-4 group font-sans">
+                <div
+                  className="w-10 h-10 rounded-full flex items-center justify-center shrink-0 transition-colors"
+                  style={{ backgroundColor: "rgba(255,255,255,0.12)" }}
+                >
+                  <Phone size={17} className="text-white" />
                 </div>
+                <span className="text-white/80 text-sm sm:text-base group-hover:text-white transition-colors">
+                  Support: (+1) 234 567 890
+                </span>
+              </a>
+            </div>
+          </div>
 
-                <div className="flex gap-6 items-center">
-                  <div className="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center border border-white/20">
-                    <MapPin size={24} />
-                  </div>
-                  <div>
-                    <p className="text-white/60 text-sm font-bold uppercase tracking-widest">Address</p>
-                    <p className="text-xl font-bold">123 Wellness Blvd, Healthcare City</p>
-                  </div>
-                </div>
-
-                <div className="flex gap-6 items-center">
-                  <div className="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center border border-white/20">
-                    <Clock size={24} />
-                  </div>
-                  <div>
-                    <p className="text-white/60 text-sm font-bold uppercase tracking-widest">Opening Hours</p>
-                    <p className="text-xl font-bold">Mon - Sun: 08:00 AM - 10:00 PM</p>
-                  </div>
-                </div>
-              </div>
+          {/* ── Right: Card + Form ── */}
+          <div className="order-1 lg:order-2 relative lg:-ml-10 xl:-ml-20">
+            {/* Decorative concentric arcs — top right of card */}
+            <div className="absolute -top-6 -right-4 w-28 sm:w-36 h-28 sm:h-36 pointer-events-none overflow-hidden rounded-tr-3xl">
+              {[0, 12, 24, 36, 48].map((offset) => (
+                <div
+                  key={offset}
+                  className="absolute rounded-full border"
+                  style={{
+                    width: `${120 + offset * 8}px`,
+                    height: `${120 + offset * 8}px`,
+                    top: `-${offset * 4}px`,
+                    right: `-${offset * 4}px`,
+                    borderColor: "rgba(61,53,102,0.15)",
+                  }}
+                />
+              ))}
             </div>
 
-            {/* Contact Form */}
-            <div className="p-12 lg:p-20">
-              <form className="space-y-6">
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <label className="text-sm font-bold text-foreground/60 uppercase">Full Name</label>
+            <div className="bg-white rounded-3xl sm:rounded-[32px] p-6 sm:p-8 lg:p-10 shadow-2xl relative overflow-hidden">
+              <h3 className="text-xl sm:text-2xl lg:text-[1.6rem] font-black text-gray-900 leading-snug mb-6 sm:mb-8 font-display">
+                We'd love to hear from you!
+                <br />
+                Let's get in touch
+              </h3>
+
+              <form className="space-y-4 sm:space-y-5">
+                {/* Row 1 */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-xs font-semibold text-gray-500">
+                      Full Name
+                    </label>
                     <input
                       type="text"
-                      placeholder="John Doe"
-                      className="w-full px-6 py-4 rounded-2xl bg-slate-50 border border-border focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all outline-none"
+                      className="w-full px-4 py-3 rounded-xl border text-sm text-gray-900 placeholder:text-gray-300 outline-none transition-all focus:ring-2"
+                      style={{
+                        borderColor: "#e5e7eb",
+                        // @ts-ignore
+                        "--tw-ring-color": "#3d356620",
+                      }}
                     />
                   </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-bold text-foreground/60 uppercase">Email Address</label>
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-xs font-semibold text-gray-500">
+                      Email
+                    </label>
+                    <div className="relative">
+                      <Mail
+                        size={14}
+                        className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-300"
+                      />
+                      <input
+                        type="email"
+                        placeholder="olivia@untitled.com"
+                        className="w-full pl-9 pr-4 py-3 rounded-xl border text-sm text-gray-900 placeholder:text-gray-300 outline-none transition-all focus:ring-2"
+                        style={{ borderColor: "#e5e7eb" }}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-semibold text-gray-500">
+                    Phone number
+                  </label>
+                  <div className="flex gap-2">
+                    <select
+                      className="px-3 py-3 rounded-xl border text-sm text-gray-600 outline-none bg-white shrink-0"
+                      style={{ borderColor: "#e5e7eb" }}
+                    >
+                      <option>IN</option>
+                      <option>US</option>
+                      <option>UK</option>
+                    </select>
                     <input
-                      type="email"
-                      placeholder="john@example.com"
-                      className="w-full px-6 py-4 rounded-2xl bg-slate-50 border border-border focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all outline-none"
+                      type="tel"
+                      placeholder="+1 (555) 000-0000"
+                      className="flex-1 px-4 py-3 rounded-xl border text-sm text-gray-900 placeholder:text-gray-300 outline-none transition-all focus:ring-2"
+                      style={{ borderColor: "#e5e7eb" }}
                     />
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <label className="text-sm font-bold text-foreground/60 uppercase">Subject</label>
-                  <select className="w-full px-6 py-4 rounded-2xl bg-slate-50 border border-border focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all outline-none appearance-none">
-                    <option>General Inquiry</option>
-                    <option>Prescription Question</option>
-                    <option>Product Availability</option>
-                    <option>Feedback</option>
-                  </select>
-                </div>
 
-                <div className="space-y-2">
-                  <label className="text-sm font-bold text-foreground/60 uppercase">Message</label>
+
+                {/* Message */}
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-semibold text-gray-500 font-sans">
+                    Your Message
+                  </label>
                   <textarea
                     rows={4}
-                    placeholder="How can we help you today?"
-                    className="w-full px-6 py-4 rounded-2xl bg-slate-50 border border-border focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all outline-none resize-none"
-                  ></textarea>
+                    placeholder="Type your message here"
+                    className="w-full px-4 py-3 rounded-xl border text-sm text-gray-900 placeholder:text-gray-300 outline-none transition-all focus:ring-2 resize-none font-sans"
+                    style={{ borderColor: "#e5e7eb" }}
+                  />
                 </div>
 
+                {/* Submit */}
                 <button
                   type="submit"
-                  className="w-full bg-secondary hover:bg-secondary/90 text-white py-5 rounded-2xl font-bold text-lg flex items-center justify-center gap-3 transition-all shadow-xl shadow-secondary/20 hover:shadow-secondary/40 active:scale-[0.98]"
+                  className="px-7 py-3 rounded-xl text-white text-sm font-bold flex items-center gap-2 transition-all active:scale-95 hover:opacity-90"
+                  style={{ backgroundColor: "#2a5491" }}
                 >
                   Send Message
-                  <Send size={20} />
                 </button>
               </form>
             </div>
           </div>
+
         </div>
       </div>
     </section>
   );
-}
+} 
