@@ -119,7 +119,7 @@ function NavbarContent() {
           {/* Desktop links */}
           <div className="hidden md:flex items-center gap-6 lg:gap-10 xl:gap-12">
             {navLinks.map((link) => {
-              const isSection = link.href.startsWith("/") && link.href !== "/" && !link.href.includes("/our-sku");
+            const isSection = link.href.startsWith("/") && link.href !== "/" && !link.href.includes("/allproducts");
               const href = isSection ? "/" : link.href;
               const sectionId = isSection ? link.href.substring(1) : (link.href === "/" ? "home" : undefined);
               const isActive = pathname === link.href;
@@ -171,7 +171,7 @@ function NavbarContent() {
       >
         <div className="bg-white mt-2 rounded-3xl p-6 sm:p-8 flex flex-col gap-1 shadow-2xl border border-border">
           {navLinks.map((link, i) => {
-            const isSection = link.href.startsWith("/") && link.href !== "/" && !link.href.includes("/our-sku");
+            const isSection = link.href.startsWith("/") && link.href !== "/" && !link.href.includes("/allproducts");
             const href = isSection ? "/" : link.href;
             const sectionId = isSection ? link.href.substring(1) : (link.href === "/" ? "home" : undefined);
             const isActive = pathname === link.href;

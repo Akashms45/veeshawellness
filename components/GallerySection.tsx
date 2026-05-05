@@ -3,7 +3,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { usePageTransition } from "./page-transition";
+import { usePageTransition, TransitionLink } from "./page-transition";
 import { GALLERY_PROJECTS } from "./gallerydata";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -138,8 +138,8 @@ function CardFace({ card }: CardFaceProps) {
   const { navigateTo } = usePageTransition();
   if (card.isCta) {
     return (
-      <div
-        onClick={() => navigateTo("/our-sku")}
+      <TransitionLink
+        href="/allproducts"
         style={{
           width: "100%",
           height: "100%",
@@ -151,6 +151,7 @@ function CardFace({ card }: CardFaceProps) {
           gap: 16,
           padding: "0 28px",
           cursor: "pointer",
+          textDecoration: "none",
         }}
       >
         <div style={{ fontSize: "clamp(2rem,6vw,3rem)", lineHeight: 1 }}>📦</div>
@@ -169,7 +170,7 @@ function CardFace({ card }: CardFaceProps) {
           <br />
           Products
         </h2>
-      </div>
+      </TransitionLink>
     );
   }
   return (

@@ -72,8 +72,8 @@ export default function Allproducts(): React.JSX.Element {
   const activeFilter: string = categorySlug ? fromSlug(categorySlug) : "All";
 
   const handleFilterChange = (cat: string): void => {
-    if (cat === "All") router.push("/our-sku");
-    else router.push(`/our-sku/${toSlug(cat)}`);
+    if (cat === "All") router.push("/allproducts");
+    else router.push(`/allproducts/${toSlug(cat)}`);
   };
 
   const filtered: Product[] =

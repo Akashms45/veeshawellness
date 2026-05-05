@@ -56,7 +56,7 @@ export function PageTransitionProvider({ children }: { children: ReactNode }) {
           router.push(href, { scroll: false });
         }
 
-        const waitTime = isDifferentPage ? 300 : 150;
+        const waitTime = isDifferentPage ? 400 : 200;
 
         setTimeout(() => {
           // 2. SCROLL to section (or top)
