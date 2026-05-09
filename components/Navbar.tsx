@@ -124,6 +124,8 @@ function NavbarContent() {
             <img
               src="/logo.svg"
               alt="Veesha Wellness"
+              width="200"
+              height="50"
               className="h-8 sm:h-9 md:h-10 lg:h-11 w-auto object-contain"
             />
           </TransitionLink>

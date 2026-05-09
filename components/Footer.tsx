@@ -34,7 +34,7 @@ export default function Footer() {
             {/* Logo */}
             <div>
               <TransitionLink href="/" className="inline-flex items-center gap-2 mb-8 sm:mb-10">
-                <img src="/logo.svg" alt="Veesha Wellness" className="h-10 sm:h-11 w-auto" />
+                <img src="/logo.svg" alt="Veesha Wellness" width="200" height="50" className="h-10 sm:h-11 w-auto" />
               </TransitionLink>
             </div>
 
