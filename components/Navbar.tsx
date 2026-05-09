@@ -15,12 +15,23 @@ const navLinks = [
 
 function NavbarContent() {
   const { phase } = usePageTransition();
+  const phaseRef = useRef(phase);
+  
+  useEffect(() => {
+    phaseRef.current = phase;
+  }, [phase]);
+
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
   const lastScrollY = useRef(0);
-  const pathname = usePathname();
+  const routerPathname = usePathname();
+  const [activePath, setActivePath] = useState(routerPathname);
   const lastPathFromScroll = useRef<string | null>(null);
+
+  useEffect(() => {
+    setActivePath(routerPathname);
+  }, [routerPathname]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -45,14 +56,15 @@ function NavbarContent() {
       threshold: 0,
     };
     const handleIntersect = (entries: IntersectionObserverEntry[]) => {
-      if (phase !== "idle") return;
+      if (phaseRef.current !== "idle") return;
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           const id = entry.target.id;
           const targetPath = id === "home" ? "/" : `/${id}`;
-          if (id && pathname !== targetPath && navLinks.some((l) => l.href === targetPath)) {
+          if (id && activePath !== targetPath && navLinks.some((l) => l.href === targetPath)) {
             lastPathFromScroll.current = targetPath;
             window.history.replaceState(null, "", targetPath);
+            setActivePath(targetPath);
           }
         }
       });
@@ -64,19 +76,19 @@ function NavbarContent() {
       if (el) observer.observe(el);
     });
     return () => observer.disconnect();
-  }, [pathname, phase]);
+  }, [activePath]);
 
   useEffect(() => {
     if (phase !== "idle") return;
-    if (pathname === lastPathFromScroll.current) return;
-    const id = pathname === "/" ? "home" : pathname.substring(1);
+    if (routerPathname === lastPathFromScroll.current) return;
+    const id = routerPathname === "/" ? "home" : routerPathname.substring(1);
     const validIds = navLinks.map((l) => (l.href === "/" ? "home" : l.href.substring(1)));
     if (id === "home") return;
     if (id && validIds.includes(id)) {
       const target = document.getElementById(id);
       if (target) target.scrollIntoView({ behavior: "instant", block: "start" });
     }
-  }, [pathname, phase]);
+  }, [routerPathname, phase]);
 
   // Close mobile menu on resize to desktop
   useEffect(() => {
@@ -110,7 +122,7 @@ function NavbarContent() {
             onClick={() => { lastPathFromScroll.current = null; }}
           >
             <img
-              src="/logo.svg"
+              src="/feviicons/favicon.svg"
               alt="Veesha Wellness"
               className="h-8 sm:h-9 md:h-10 lg:h-11 w-auto object-contain"
             />
@@ -122,14 +134,22 @@ function NavbarContent() {
             const isSection = link.href.startsWith("/") && link.href !== "/" && !link.href.includes("/allproducts");
               const href = isSection ? "/" : link.href;
               const sectionId = isSection ? link.href.substring(1) : (link.href === "/" ? "home" : undefined);
-              const isActive = pathname === link.href;
+              const isActive = activePath === link.href;
 
               return (
                 <TransitionLink
                   key={link.name}
                   href={href}
                   sectionId={sectionId}
-                  onClick={() => { lastPathFromScroll.current = null; }}
+                  onClick={() => { 
+                    lastPathFromScroll.current = link.href; 
+                    setActivePath(link.href);
+                    if (isSection) {
+                      setTimeout(() => {
+                        window.history.replaceState(null, "", link.href);
+                      }, 600);
+                    }
+                  }}
                   className={`text-[11px] lg:text-[13px] font-bold tracking-widest uppercase transition-colors underline-offset-8 hover:underline whitespace-nowrap font-sans ${
                     isActive ? "underline decoration-2" : "text-foreground/70"
                   }`}
@@ -174,7 +194,7 @@ function NavbarContent() {
             const isSection = link.href.startsWith("/") && link.href !== "/" && !link.href.includes("/allproducts");
             const href = isSection ? "/" : link.href;
             const sectionId = isSection ? link.href.substring(1) : (link.href === "/" ? "home" : undefined);
-            const isActive = pathname === link.href;
+            const isActive = activePath === link.href;
 
             return (
               <TransitionLink
@@ -189,7 +209,13 @@ function NavbarContent() {
                   animationDelay: `${i * 40}ms`,
                 }}
                 onClick={() => {
-                  lastPathFromScroll.current = null;
+                  lastPathFromScroll.current = link.href;
+                  setActivePath(link.href);
+                  if (isSection) {
+                    setTimeout(() => {
+                      window.history.replaceState(null, "", link.href);
+                    }, 600);
+                  }
                   setIsOpen(false);
                 }}
               >

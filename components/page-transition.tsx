@@ -64,10 +64,10 @@ export function PageTransitionProvider({ children }: { children: ReactNode }) {
             const el = document.getElementById(sectionId);
             if (el) {
               el.scrollIntoView({ behavior: "instant", block: "start" });
-            } else {
+            } else if (!isDifferentPage) {
               window.scrollTo({ top: 0, behavior: "instant" });
             }
-          } else {
+          } else if (!isDifferentPage) {
             window.scrollTo({ top: 0, behavior: "instant" });
           }
 

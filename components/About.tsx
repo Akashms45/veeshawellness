@@ -129,7 +129,7 @@ function MobileCardAnimation({
       ))}
       <div style={{ display: 'flex', justifyContent: 'space-between', padding: '4vw 6vw 6vw' }}>
         <span style={{ fontSize: '0.65rem', fontWeight: 800, letterSpacing: '0.06em', textTransform: 'uppercase', color: '#140505' }}>{leftText}</span>
-        <button style={{ all: 'unset', fontSize: '0.65rem', fontWeight: 700, color: '#140505', borderBottom: '1px solid #140505', paddingBottom: '1px', cursor: 'pointer' }}>{rightText}</button>
+        <button aria-label={rightText || "Read more"} style={{ all: 'unset', fontSize: '0.65rem', fontWeight: 700, color: '#140505', borderBottom: '1px solid #140505', paddingBottom: '1px', cursor: 'pointer' }}>{rightText}</button>
       </div>
     </div>
   );
@@ -307,7 +307,7 @@ function DesktopCardAnimation({
             {leftText}
           </span>
 
-          <button style={{
+          <button aria-label={rightText || "Read more"} style={{
             all: 'unset', position: 'absolute', bottom: BOTTOM, right: '4vw',
             zIndex: 30, fontSize: '0.7rem', fontWeight: 700,
             color: '#140505', borderBottom: '1px solid #140505',

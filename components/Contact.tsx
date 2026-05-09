@@ -25,7 +25,7 @@ export default function Contact() {
             <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black leading-[1.1] mb-4 sm:mb-6 tracking-tight font-display">
               Contact Us
             </h2>
-            <p className="text-white/60 text-sm sm:text-base leading-relaxed mb-10 sm:mb-14 max-w-sm font-sans">
+            <p className="text-white/80 text-sm sm:text-base leading-relaxed mb-10 sm:mb-14 max-w-sm font-sans">
               Not sure what you need? The team at Veesha Wellness will be happy
               to listen to you and suggest the right products you hadn't
               considered.
@@ -92,12 +92,13 @@ export default function Contact() {
                 {/* Row 1 */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-xs font-semibold text-gray-500">
+                    <label htmlFor="fullName" className="text-xs font-semibold text-gray-600">
                       Full Name
                     </label>
                     <input
+                      id="fullName"
                       type="text"
-                      className="w-full px-4 py-3 rounded-xl border text-sm text-gray-900 placeholder:text-gray-300 outline-none transition-all focus:ring-2"
+                      className="w-full px-4 py-3 rounded-xl border text-sm text-gray-900 placeholder:text-gray-500 outline-none transition-all focus:ring-2"
                       style={{
                         borderColor: "#e5e7eb",
                         // @ts-ignore
@@ -106,18 +107,19 @@ export default function Contact() {
                     />
                   </div>
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-xs font-semibold text-gray-500">
+                    <label htmlFor="email" className="text-xs font-semibold text-gray-600">
                       Email
                     </label>
                     <div className="relative">
                       <Mail
                         size={14}
-                        className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-300"
+                        className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400"
                       />
                       <input
+                        id="email"
                         type="email"
                         placeholder="olivia@untitled.com"
-                        className="w-full pl-9 pr-4 py-3 rounded-xl border text-sm text-gray-900 placeholder:text-gray-300 outline-none transition-all focus:ring-2"
+                        className="w-full pl-9 pr-4 py-3 rounded-xl border text-sm text-gray-900 placeholder:text-gray-500 outline-none transition-all focus:ring-2"
                         style={{ borderColor: "#e5e7eb" }}
                       />
                     </div>
@@ -125,12 +127,14 @@ export default function Contact() {
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-xs font-semibold text-gray-500">
+                  <label htmlFor="phone" className="text-xs font-semibold text-gray-600">
                     Phone number
                   </label>
                   <div className="flex gap-2">
                     <select
-                      className="px-3 py-3 rounded-xl border text-sm text-gray-600 outline-none bg-white shrink-0"
+                      id="countryCode"
+                      aria-label="Country Code"
+                      className="px-3 py-3 rounded-xl border text-sm text-gray-700 outline-none bg-white shrink-0"
                       style={{ borderColor: "#e5e7eb" }}
                     >
                       <option>IN</option>
@@ -138,9 +142,10 @@ export default function Contact() {
                       <option>UK</option>
                     </select>
                     <input
+                      id="phone"
                       type="tel"
                       placeholder="+1 (555) 000-0000"
-                      className="flex-1 px-4 py-3 rounded-xl border text-sm text-gray-900 placeholder:text-gray-300 outline-none transition-all focus:ring-2"
+                      className="flex-1 px-4 py-3 rounded-xl border text-sm text-gray-900 placeholder:text-gray-500 outline-none transition-all focus:ring-2"
                       style={{ borderColor: "#e5e7eb" }}
                     />
                   </div>
@@ -150,13 +155,14 @@ export default function Contact() {
 
                 {/* Message */}
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-xs font-semibold text-gray-500 font-sans">
+                  <label htmlFor="message" className="text-xs font-semibold text-gray-600 font-sans">
                     Your Message
                   </label>
                   <textarea
+                    id="message"
                     rows={4}
                     placeholder="Type your message here"
-                    className="w-full px-4 py-3 rounded-xl border text-sm text-gray-900 placeholder:text-gray-300 outline-none transition-all focus:ring-2 resize-none font-sans"
+                    className="w-full px-4 py-3 rounded-xl border text-sm text-gray-900 placeholder:text-gray-500 outline-none transition-all focus:ring-2 resize-none font-sans"
                     style={{ borderColor: "#e5e7eb" }}
                   />
                 </div>

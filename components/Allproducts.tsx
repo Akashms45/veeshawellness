@@ -294,6 +294,7 @@ function ProductDialog({ product, onClose }: ProductDialogProps): React.JSX.Elem
 
         <button
           onClick={onClose}
+          aria-label="Close"
           style={{
             position: "absolute",
             top: isMobile ? 14 : 16,

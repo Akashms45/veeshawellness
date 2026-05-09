@@ -138,8 +138,12 @@ function CardFace({ card }: CardFaceProps) {
   const { navigateTo } = usePageTransition();
   if (card.isCta) {
     return (
-      <div
-        onClick={() => navigateTo("/allproducts")}
+      <button
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          navigateTo("/allproducts");
+        }}
         style={{
           width: "100%",
           height: "100%",
@@ -151,6 +155,8 @@ function CardFace({ card }: CardFaceProps) {
           gap: 16,
           padding: "0 28px",
           cursor: "pointer",
+          border: "none",
+          outline: "none",
         }}
       >
         <div style={{ fontSize: "clamp(2rem,6vw,3rem)", lineHeight: 1 }}>📦</div>
@@ -169,7 +175,7 @@ function CardFace({ card }: CardFaceProps) {
           <br />
           Products
         </h2>
-      </div>
+      </button>
     );
   }
   return (
@@ -419,9 +425,10 @@ export default function GallerySection() {
               right: 0,
               zIndex: 40,
               padding: `0 ${isMobile ? "1.2rem" : "clamp(1.5rem,4vw,4.5rem)"}`,
+              pointerEvents: "none", // Added to prevent blocking clicks on cards
             }}
           >
-            <div>
+            <div style={{ pointerEvents: "auto" }}>
               <h2
                 style={{
                   fontFamily: "var(--font-display), serif",

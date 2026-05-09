@@ -16,6 +16,20 @@ const abhaya = Abhaya_Libre({
 export const metadata: Metadata = {
   title: "Veesha Wellness | Your Trusted Neighborhood Pharmacy",
   description: "Experience premium healthcare and wellness services at Veesha Wellness. High-quality medicines, healthcare products, and expert consultations.",
+  keywords: ["Pharmacy", "Veesha Wellness", "Healthcare", "Medicines", "Wellness", "Medical Products", "Neighborhood Pharmacy"],
+  openGraph: {
+    title: "Veesha Wellness | Your Trusted Neighborhood Pharmacy",
+    description: "Experience premium healthcare and wellness services at Veesha Wellness. High-quality medicines, healthcare products, and expert consultations.",
+    url: "https://veeshawellness.com",
+    siteName: "Veesha Wellness",
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Veesha Wellness",
+    description: "Experience premium healthcare and wellness services at Veesha Wellness.",
+  },
   icons: {
     icon: [
       { url: "/feviicons/favicon-96x96.png", sizes: "96x96", type: "image/png" },
