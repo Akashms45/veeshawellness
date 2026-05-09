@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from 'react';
+import Image from 'next/image';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -92,6 +93,7 @@ function AvatarImage({ img, name, size, isMid }: AvatarImageProps): React.JSX.El
   return (
     <div
       style={{
+        position: 'relative',
         width: size,
         height: size,
         borderRadius: '50%',
@@ -101,10 +103,12 @@ function AvatarImage({ img, name, size, isMid }: AvatarImageProps): React.JSX.El
         background: '#ddd',
       }}
     >
-      <img
+      <Image
         src={img}
         alt={name}
-        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+        fill
+        sizes="100px"
+        style={{ objectFit: 'cover', display: 'block' }}
       />
     </div>
   );

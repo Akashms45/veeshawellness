@@ -122,7 +122,7 @@ function NavbarContent() {
             onClick={() => { lastPathFromScroll.current = null; }}
           >
             <img
-              src="/feviicons/favicon.svg"
+              src="/logo.svg"
               alt="Veesha Wellness"
               className="h-8 sm:h-9 md:h-10 lg:h-11 w-auto object-contain"
             />

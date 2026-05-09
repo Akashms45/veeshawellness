@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import Image from 'next/image';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -54,22 +55,18 @@ function MobileCardItem({ image, body, cta, backgroundColor }: MobileCardItemPro
       gap: '5vw', width: '100%', padding: '14vh 0 14vw', backgroundColor,
     }}>
       <div style={{
+        position: 'relative',
         width: `${cardW}vw`, height: `${cardH}vw`, borderRadius: cardR,
         background: '#140505', overflow: 'hidden',
         willChange: 'width, height, border-radius', transition: 'none',
       }}>
         {image && (
-          <img 
+          <Image 
             src={image} 
             alt="" 
-            loading="lazy" 
-            onError={(e) => {
-              // Fallback to original if webp fails
-              if ((e.target as HTMLImageElement).src.endsWith('.webp')) {
-                (e.target as HTMLImageElement).src = image.replace('.webp', '.png');
-              }
-            }}
-            style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', display: 'block' }} 
+            fill
+            sizes="(max-width: 768px) 100vw, 50vw"
+            style={{ objectFit: 'cover', objectPosition: 'center', display: 'block' }} 
           />
         )}
       </div>
@@ -333,16 +330,12 @@ function DesktopCardAnimation({
             return (
               <div style={style}>
                 {imageSrc && (
-                  <img 
+                  <Image 
                     src={imageSrc} 
                     alt="" 
-                    loading="lazy" 
-                    onError={(e) => {
-                      if ((e.target as HTMLImageElement).src.endsWith('.webp')) {
-                        (e.target as HTMLImageElement).src = imageSrc.replace('.webp', '.png');
-                      }
-                    }}
-                    style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', display: 'block' }} 
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    style={{ objectFit: 'cover', objectPosition: 'center', display: 'block' }} 
                   />
                 )}
               </div>
@@ -355,20 +348,20 @@ function DesktopCardAnimation({
               return (
                 <div style={{ position: 'absolute', bottom: BOTTOM, left: smR_left_px, width: `${SM_VW}vw`, height: `${SM_VH}vh`, overflow: 'visible', zIndex: 20, pointerEvents: 'none' }}>
                   <div style={{ position: 'absolute', bottom: 0, right: 0, width: `${c2_app_W}vw`, height: `${c2_app_H}vh`, borderRadius: c2_app_R, overflow: 'hidden', background: '#140505', pointerEvents: 'auto', willChange: 'width, height' }}>
-                    {image2Src && <img src={image2Src} alt="" loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', display: 'block' }} />}
+                    {image2Src && <Image src={image2Src} alt="" fill sizes="(max-width: 1024px) 100vw, 50vw" style={{ objectFit: 'cover', objectPosition: 'center', display: 'block' }} />}
                   </div>
                 </div>
               );
             } else if (p < 0.66) {
               return (
                 <div style={{ position: 'absolute', bottom: `${btm_px}px`, left: `${c2_left}px`, width: `${c2_W}vw`, height: `${c2_H}vh`, borderRadius: c2_R, zIndex: 21, overflow: 'hidden', background: '#140505', willChange: 'width, height, left' }}>
-                  {image2Src && <img src={image2Src} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', display: 'block' }} loading="lazy" />}
+                  {image2Src && <Image src={image2Src} alt="" fill sizes="(max-width: 1024px) 100vw, 50vw" style={{ objectFit: 'cover', objectPosition: 'center', display: 'block' }} />}
                 </div>
               );
             } else {
               return (
                 <div style={{ position: 'absolute', left: `${c2C_left}px`, top: `${c2C_top}px`, width: `${c2C_W}vw`, height: `${c2C_H}vh`, borderRadius: c2C_R, zIndex: 21, overflow: 'hidden', background: '#140505', willChange: 'width, height, left, top' }}>
-                  {image2Src && <img src={image2Src} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', display: 'block' }} loading="lazy" />}
+                  {image2Src && <Image src={image2Src} alt="" fill sizes="(max-width: 1024px) 100vw, 50vw" style={{ objectFit: 'cover', objectPosition: 'center', display: 'block' }} />}
                 </div>
               );
             }
@@ -378,13 +371,13 @@ function DesktopCardAnimation({
           {inB && !inC && (
             <div style={{ position: 'absolute', bottom: BOTTOM, left: smR_left_px, width: `${SM_VW}vw`, height: `${SM_VH}vh`, overflow: 'visible', zIndex: 22, pointerEvents: 'none' }}>
               <div style={{ position: 'absolute', bottom: 0, right: 0, width: `${c3_app_W}vw`, height: `${c3_app_H}vh`, borderRadius: c3_app_R, overflow: 'hidden', background: '#140505', pointerEvents: 'auto', willChange: 'width, height' }}>
-                {image3Src && <img src={image3Src} alt="" loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', display: 'block' }} />}
+                {image3Src && <Image src={image3Src} alt="" fill sizes="(max-width: 1024px) 100vw, 50vw" style={{ objectFit: 'cover', objectPosition: 'center', display: 'block' }} />}
               </div>
             </div>
           )}
           {inC && (
             <div style={{ position: 'absolute', bottom: `${btm_px}px`, left: `${c3_left}px`, width: `${c3_W}vw`, height: `${c3_H}vh`, borderRadius: c3_R, zIndex: 22, overflow: 'hidden', background: '#140505', willChange: 'width, height, left' }}>
-              {image3Src && <img src={image3Src} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', display: 'block' }} loading="lazy" />}
+              {image3Src && <Image src={image3Src} alt="" fill sizes="(max-width: 1024px) 100vw, 50vw" style={{ objectFit: 'cover', objectPosition: 'center', display: 'block' }} />}
             </div>
           )}
         </div>

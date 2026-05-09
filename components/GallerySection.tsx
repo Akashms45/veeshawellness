@@ -3,6 +3,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Image from "next/image";
 import { usePageTransition, TransitionLink } from "./page-transition";
 import { GALLERY_PROJECTS } from "./gallerydata";
 
@@ -180,14 +181,12 @@ function CardFace({ card }: CardFaceProps) {
   }
   return (
     <>
-      <img
+      <Image
         src={card.image}
         alt={card.name}
+        fill
+        sizes="(max-width: 1024px) 100vw, 33vw"
         style={{
-          position: "absolute",
-          inset: 0,
-          width: "100%",
-          height: "100%",
           objectFit: "cover",
         }}
       />
@@ -506,12 +505,12 @@ export default function GallerySection() {
                         background: p.color,
                       }}
                     >
-                      <img
+                      <Image
                         src={p.image}
                         alt={p.name}
+                        fill
+                        sizes="40px"
                         style={{
-                          width: "100%",
-                          height: "100%",
                           objectFit: "cover",
                           display: "block",
                         }}
@@ -646,12 +645,12 @@ export default function GallerySection() {
                         background: p.color,
                       }}
                     >
-                      <img
+                      <Image
                         src={p.image}
                         alt={p.name}
+                        fill
+                        sizes="40px"
                         style={{
-                          width: "100%",
-                          height: "100%",
                           objectFit: "cover",
                           display: "block",
                         }}
