@@ -336,10 +336,10 @@ function ProductDialog({ product, onClose }: ProductDialogProps): React.JSX.Elem
             <p style={{ fontFamily: FONT_HEAD, fontSize: 18, color: "#233E8B", margin: 0, letterSpacing: "0.04em" }}>{product.packing ?? "—"}</p>
           </div>
           
-          <div style={{ marginTop: "1rem" }}>
+          {/* <div style={{ marginTop: "1rem" }}>
             <p style={{ fontFamily: FONT_HEAD, fontSize: 12, letterSpacing: "0.1em", color: "#aaa", margin: "0 0 5px", textTransform: "uppercase" }}>MRP</p>
             <p style={{ fontFamily: FONT_HEAD, fontSize: 24, color: "#1a7a3a", margin: 0 }}>₹{product.mrp.toFixed(2)}</p>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
@@ -354,7 +354,7 @@ function ProductTable({ products, onRowClick }: ProductTableProps): React.JSX.El
       <table style={{ width: "100%", borderCollapse: "collapse", fontFamily: FONT_BODY, fontSize: "14px" }}>
         <thead>
           <tr style={{ background: "#0E101E" }}>
-            {["#", "Composition", "Type", "Packing", "MRP"].map((h) => (
+            {["#", "Composition", "Type", "Packing"/*, "MRP"*/].map((h) => (
               <th key={h} style={{ padding: "14px 18px", textAlign: "left", color: "#fff", fontFamily: FONT_HEAD, fontSize: "15px", letterSpacing: "0.06em", fontWeight: 400, whiteSpace: "nowrap" }}>{h}</th>
             ))}
           </tr>
@@ -372,7 +372,7 @@ function ProductTable({ products, onRowClick }: ProductTableProps): React.JSX.El
               <td style={{ padding: "12px 18px", fontFamily: FONT_HEAD, fontSize: "16px", color: "#0F172A", letterSpacing: "0.04em" }}>{product.composition}</td>
               <td style={{ padding: "12px 18px" }}><span style={{ display: "inline-block", background: "#0E101E", color: "#fff", borderRadius: 6, padding: "3px 12px", fontSize: "12px", fontFamily: FONT_HEAD, letterSpacing: "0.06em", whiteSpace: "nowrap" }}>{product.type}</span></td>
               <td style={{ padding: "12px 18px", color: "#233E8B", fontFamily: FONT_HEAD, fontSize: "14px", letterSpacing: "0.04em", whiteSpace: "nowrap" }}>{product.packing ?? "—"}</td>
-              <td style={{ padding: "12px 18px", color: "#1a7a3a", fontFamily: FONT_HEAD, fontSize: "14px" }}>₹{product.mrp.toFixed(2)}</td>
+              {/* <td style={{ padding: "12px 18px", color: "#1a7a3a", fontFamily: FONT_HEAD, fontSize: "14px" }}>₹{product.mrp.toFixed(2)}</td> */}
             </tr>
           ))}
         </tbody>

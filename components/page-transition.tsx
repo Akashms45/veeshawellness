@@ -49,38 +49,40 @@ export function PageTransitionProvider({ children }: { children: ReactNode }) {
       // 1. DROP CURTAIN IN
       setPhase("in");
 
-      setTimeout(() => {
-        const isDifferentPage = window.location.pathname !== href;
+      const isDifferentPage = window.location.pathname !== href;
 
+      // 2. START NAVIGATION EARLY (after a tiny delay so the first strip starts)
+      setTimeout(() => {
         if (isDifferentPage) {
           router.push(href, { scroll: false });
         }
+      }, 80);
 
-        const waitTime = isDifferentPage ? 400 : 200;
+      // 3. LIFT CURTAIN after animation completes + small buffer for load
+      const totalWait = ANIM_TIME + (isDifferentPage ? 150 : 50);
 
-        setTimeout(() => {
-          // 2. SCROLL to section (or top)
-          if (sectionId) {
-            const el = document.getElementById(sectionId);
-            if (el) {
-              el.scrollIntoView({ behavior: "instant", block: "start" });
-            } else if (!isDifferentPage) {
-              window.scrollTo({ top: 0, behavior: "instant" });
-            }
+      setTimeout(() => {
+        // SCROLL to section (or top)
+        if (sectionId) {
+          const el = document.getElementById(sectionId);
+          if (el) {
+            el.scrollIntoView({ behavior: "instant", block: "start" });
           } else if (!isDifferentPage) {
             window.scrollTo({ top: 0, behavior: "instant" });
           }
+        } else if (!isDifferentPage) {
+          window.scrollTo({ top: 0, behavior: "instant" });
+        }
 
           // 3. LIFT CURTAIN OUT
-          setPhase("out");
+        setPhase("out");
 
           // 4. RESET
-          setTimeout(() => {
-            setPhase("idle");
-            busy.current = false;
-          }, ANIM_TIME + 50);
-        }, waitTime);
-      }, ANIM_TIME + 20);
+        setTimeout(() => {
+          setPhase("idle");
+          busy.current = false;
+        }, ANIM_TIME + 50);
+      }, totalWait);
     },
     [router]
   );

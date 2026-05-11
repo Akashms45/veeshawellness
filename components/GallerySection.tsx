@@ -217,7 +217,6 @@ function CardFace({ card }: CardFaceProps) {
             textTransform: "uppercase",
             lineHeight: 0.85,
             margin: 0,
-            textShadow: "1px 3px 12px rgba(0,0,0,0.65)",
             whiteSpace: "pre-line",
           }}
         >
@@ -432,7 +431,7 @@ export default function GallerySection() {
                 style={{
                   fontFamily: "var(--font-display), serif",
                   fontSize: "clamp(2rem, 7vw, 4.5rem)",
-                  color: "#0E101E",
+                  color: "#fff",
                   textTransform: "uppercase",
                   margin: 0,
                   lineHeight: 1.1,
@@ -466,7 +465,6 @@ export default function GallerySection() {
                     textTransform: "uppercase",
                     letterSpacing: "-1px",
                     margin: "0 0 10px 0",
-                    textShadow: "2px 4px 0 rgba(0,0,0,0.15)",
                     paddingTop: 26,
                   }}
                 />
@@ -599,7 +597,6 @@ export default function GallerySection() {
                     textTransform: "uppercase",
                     letterSpacing: "-1px",
                     margin: "0 0 14px 0",
-                    textShadow: "2px 4px 0 rgba(0,0,0,0.15)",
                     minHeight: "1.8em",
                   }}
                 />

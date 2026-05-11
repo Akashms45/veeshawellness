@@ -5,7 +5,7 @@ export const GALLERY_PROJECTS = [
     title: "TABLETS",
     description:
       "High-quality solid dosage forms manufactured with precision for optimal therapeutic effectiveness.",
-    image: "/gallery/tablets.avif",
+    image: "/gallery/tablets.png",
     color: "#64B5F6",
     services: ["Solid Dosage"],
   },
@@ -25,7 +25,7 @@ export const GALLERY_PROJECTS = [
     title: "LIQUID\nORALS",
     description:
       "Palatable and stable liquid formulations for effective delivery across all age groups.",
-    image: "/gallery/liquidorals.jpg",
+    image: "/gallery/liquidorals.png",
     color: "#CE93D8",
     services: ["Syrups & Suspensions"],
   },
@@ -35,7 +35,7 @@ export const GALLERY_PROJECTS = [
     title: "TOPICAL &\nOINTMENTS",
     description:
       "Dermatologically tested ointments and creams for targeted skin care and treatment.",
-    image: "/gallery/ointments.jpg",
+    image: "/gallery/ointments.png",
     color: "#FFAB66",
     services: ["Topical Care"],
   },
@@ -45,7 +45,7 @@ export const GALLERY_PROJECTS = [
     title: "STERILE\nINJECTABLES",
     description:
       "Precision-engineered sterile injectables meeting the highest pharmaceutical safety standards.",
-    image: "/gallery/injectables.jpg",
+    image: "/gallery/injectables.png",
     color: "#2D5691",
     services: ["Sterile Manufacturing"],
   },
