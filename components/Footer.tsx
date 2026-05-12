@@ -2,9 +2,10 @@ import { TransitionLink } from "./page-transition";
 
 const productLinks = [
   { label: "View All", href: "/allproducts" },
-  { label: "Ayurvedic Products", href: "/allproducts" },
-  { label: "Wellness Kits", href: "/allproducts" },
-  { label: "Daily Supplements", href: "/allproducts" },
+  { label: "Ayurvedic Products", href: "/allproducts/ayurvedic" },
+  { label: "Tablets", href: "/allproducts/tablets" },
+  { label: "Paediatric Range", href: "/allproducts/paediatric-range" },
+  { label: "Syrups & Suspensions", href: "/allproducts/syrups" },
 ];
 
 const quickLinks = [

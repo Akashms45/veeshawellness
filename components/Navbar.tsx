@@ -14,7 +14,7 @@ const navLinks = [
 ];
 
 function NavbarContent() {
-  const { phase } = usePageTransition();
+  const { phase, activePath, setActivePath } = usePageTransition();
   const phaseRef = useRef(phase);
   
   useEffect(() => {
@@ -26,12 +26,12 @@ function NavbarContent() {
   const [hidden, setHidden] = useState(false);
   const lastScrollY = useRef(0);
   const routerPathname = usePathname();
-  const [activePath, setActivePath] = useState(routerPathname);
   const lastPathFromScroll = useRef<string | null>(null);
 
+  // Sync local scroll tracker with global active path from context
   useEffect(() => {
-    setActivePath(routerPathname);
-  }, [routerPathname]);
+    lastPathFromScroll.current = activePath;
+  }, [activePath]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -56,11 +56,15 @@ function NavbarContent() {
       threshold: 0,
     };
     const handleIntersect = (entries: IntersectionObserverEntry[]) => {
+      // Ignore scroll-based updates during page transitions to prevent flicker
       if (phaseRef.current !== "idle") return;
+
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           const id = entry.target.id;
           const targetPath = id === "home" ? "/" : `/${id}`;
+          
+          // Only update if it's a new section and we're not currently in a transition
           if (id && activePath !== targetPath && navLinks.some((l) => l.href === targetPath)) {
             lastPathFromScroll.current = targetPath;
             window.history.replaceState(null, "", targetPath);
@@ -76,7 +80,7 @@ function NavbarContent() {
       if (el) observer.observe(el);
     });
     return () => observer.disconnect();
-  }, [activePath]);
+  }, [activePath, setActivePath]);
 
   useEffect(() => {
     if (phase !== "idle") return;
@@ -148,7 +152,7 @@ function NavbarContent() {
                     setActivePath(link.href);
                     if (isSection) {
                       setTimeout(() => {
-                        window.history.replaceState(null, "", link.href);
+                        window.history.pushState(null, "", link.href);
                       }, 600);
                     }
                   }}
@@ -215,7 +219,7 @@ function NavbarContent() {
                   setActivePath(link.href);
                   if (isSection) {
                     setTimeout(() => {
-                      window.history.replaceState(null, "", link.href);
+                      window.history.pushState(null, "", link.href);
                     }, 600);
                   }
                   setIsOpen(false);

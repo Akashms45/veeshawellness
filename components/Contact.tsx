@@ -1,6 +1,6 @@
 "use client";
 
-import { Mail, Phone, Send } from "lucide-react";
+import { Mail, Phone, Send, User } from "lucide-react";
 
 export default function Contact() {
   return (
@@ -95,16 +95,23 @@ export default function Contact() {
                     <label htmlFor="fullName" className="text-xs font-semibold text-gray-600">
                       Full Name
                     </label>
-                    <input
-                      id="fullName"
-                      type="text"
-                      className="w-full px-4 py-3 rounded-xl border text-sm text-gray-900 placeholder:text-gray-500 outline-none transition-all focus:ring-2"
-                      style={{
-                        borderColor: "#e5e7eb",
-                        // @ts-ignore
-                        "--tw-ring-color": "#3d356620",
-                      }}
-                    />
+                    <div className="relative">
+                      <User
+                        size={14}
+                        className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400"
+                      />
+                      <input
+                        id="fullName"
+                        type="text"
+                        placeholder="Enter your name"
+                        className="w-full pl-9 pr-4 py-3 rounded-xl border text-sm text-gray-900 placeholder:text-gray-500 outline-none transition-all focus:ring-2"
+                        style={{
+                          borderColor: "#e5e7eb",
+                          // @ts-ignore
+                          "--tw-ring-color": "#3d356620",
+                        }}
+                      />
+                    </div>
                   </div>
                   <div className="flex flex-col gap-1.5">
                     <label htmlFor="email" className="text-xs font-semibold text-gray-600">

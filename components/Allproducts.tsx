@@ -355,7 +355,7 @@ function ProductTable({ products, onRowClick }: ProductTableProps): React.JSX.El
         <thead>
           <tr style={{ background: "#0E101E" }}>
             {["#", "Composition", "Type", "Packing"/*, "MRP"*/].map((h) => (
-              <th key={h} style={{ padding: "14px 18px", textAlign: "left", color: "#fff", fontFamily: FONT_HEAD, fontSize: "15px", letterSpacing: "0.06em", fontWeight: 400, whiteSpace: "nowrap" }}>{h}</th>
+              <th key={h} style={{ padding: "14px 18px", textAlign: "left", color: "#fff", fontFamily: FONT_BODY, fontSize: "14px", letterSpacing: "0.02em", fontWeight: 600, whiteSpace: "nowrap" }}>{h}</th>
             ))}
           </tr>
         </thead>
@@ -369,10 +369,10 @@ function ProductTable({ products, onRowClick }: ProductTableProps): React.JSX.El
               onMouseLeave={(e) => (e.currentTarget.style.background = i % 2 === 0 ? "#fff" : "#F7F8FA")}
             >
               <td style={{ padding: "12px 18px", color: "#aaa", fontSize: "13px", fontFamily: FONT_BODY, width: 48 }}>{String(i + 1).padStart(2, "0")}</td>
-              <td style={{ padding: "12px 18px", fontFamily: FONT_HEAD, fontSize: "16px", color: "#0F172A", letterSpacing: "0.04em" }}>{product.composition}</td>
-              <td style={{ padding: "12px 18px" }}><span style={{ display: "inline-block", background: "#0E101E", color: "#fff", borderRadius: 6, padding: "3px 12px", fontSize: "12px", fontFamily: FONT_HEAD, letterSpacing: "0.06em", whiteSpace: "nowrap" }}>{product.type}</span></td>
-              <td style={{ padding: "12px 18px", color: "#233E8B", fontFamily: FONT_HEAD, fontSize: "14px", letterSpacing: "0.04em", whiteSpace: "nowrap" }}>{product.packing ?? "—"}</td>
-              {/* <td style={{ padding: "12px 18px", color: "#1a7a3a", fontFamily: FONT_HEAD, fontSize: "14px" }}>₹{product.mrp.toFixed(2)}</td> */}
+              <td style={{ padding: "12px 18px", fontFamily: FONT_BODY, fontSize: "15px", fontWeight: 600, color: "#0F172A" }}>{product.composition}</td>
+              <td style={{ padding: "12px 18px" }}><span style={{ display: "inline-block", background: "#0E101E", color: "#fff", borderRadius: 6, padding: "3px 12px", fontSize: "12px", fontFamily: FONT_BODY, fontWeight: 500, letterSpacing: "0.02em", whiteSpace: "nowrap" }}>{product.type}</span></td>
+              <td style={{ padding: "12px 18px", color: "#233E8B", fontFamily: FONT_BODY, fontWeight: 500, fontSize: "14px", whiteSpace: "nowrap" }}>{product.packing ?? "—"}</td>
+              {/* <td style={{ padding: "12px 18px", color: "#1a7a3a", fontFamily: FONT_BODY, fontSize: "14px" }}>₹{product.mrp.toFixed(2)}</td> */}
             </tr>
           ))}
         </tbody>

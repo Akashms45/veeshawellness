@@ -4,6 +4,7 @@ import React, { useRef, useState, useEffect } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { usePageTransition, TransitionLink } from "./page-transition";
 import { GALLERY_PROJECTS } from "./gallerydata";
 
@@ -139,12 +140,8 @@ function CardFace({ card }: CardFaceProps) {
   const { navigateTo } = usePageTransition();
   if (card.isCta) {
     return (
-      <button
-        onClick={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          navigateTo("/allproducts");
-        }}
+      <TransitionLink
+        href="/allproducts"
         style={{
           width: "100%",
           height: "100%",
@@ -158,6 +155,7 @@ function CardFace({ card }: CardFaceProps) {
           cursor: "pointer",
           border: "none",
           outline: "none",
+          textDecoration: "none",
         }}
       >
         <div style={{ fontSize: "clamp(2rem,6vw,3rem)", lineHeight: 1 }}>📦</div>
@@ -176,7 +174,7 @@ function CardFace({ card }: CardFaceProps) {
           <br />
           Products
         </h2>
-      </button>
+      </TransitionLink>
     );
   }
   return (
@@ -245,15 +243,32 @@ export default function GallerySection() {
   const isMobile = w < 640;
   const isTablet = w >= 640 && w < 1024;
 
+  const SIDE_PADDING = isMobile
+    ? "1.2rem"
+    : isTablet
+    ? "1.5rem"
+    : "clamp(1.5rem, 4vw, 4.5rem)";
+
   const CARD_W  = isMobile ? w * 0.62 : isTablet ? w * 0.28 : 340;
   const CARD_H  = CARD_W * 1.5;
-  const SPACING = CARD_W + (isMobile ? 16 : 30);
+  const SPACING = CARD_W + (isMobile ? 16 : 25); // Slightly reduced spacing
 
   const active = GALLERY_PROJECTS[activeIdx] ?? GALLERY_PROJECTS[N - 1];
 
   useEffect(() => {
     setAnimKey((k) => k + 1);
   }, [activeIdx]);
+
+  const { navigateTo } = usePageTransition();
+  const router = useRouter(); // We'll use this for prefetching
+
+  useEffect(() => {
+    // Prefetch allproducts as it's a major destination
+    if (typeof window !== "undefined") {
+      const p = router as any;
+      if (p.prefetch) p.prefetch("/allproducts");
+    }
+  }, [router]);
 
   // ── MAIN GSAP EFFECT ──────────────────────────────────────────────────────
   useEffect(() => {
@@ -419,10 +434,10 @@ export default function GallerySection() {
             style={{
               position: "absolute",
               top: isMobile ? 80 : 100,
-              left: isMobile ? 0 : -30,
+              left: 0,
               right: 0,
               zIndex: 40,
-              padding: `0 ${isMobile ? "1.2rem" : "clamp(1.5rem,4vw,4.5rem)"}`,
+              padding: `0 ${SIDE_PADDING}`,
               pointerEvents: "none", // Added to prevent blocking clicks on cards
             }}
           >
@@ -451,7 +466,7 @@ export default function GallerySection() {
                   position: "relative",
                   zIndex: 30,
                   width: "100%",
-                  padding: "130px 1.2rem 12px",
+                  padding: `130px ${SIDE_PADDING} 12px`,
                   flexShrink: 0,
                 }}
               >
@@ -577,7 +592,7 @@ export default function GallerySection() {
                     ? "clamp(160px,30%,280px)"
                     : "clamp(200px,32%,400px)",
                   flexShrink: 0,
-                  padding: `0 0 0 ${isTablet ? "1.5rem" : "clamp(1.5rem,4vw,4.5rem)"}`,
+                  padding: `0 0 0 ${SIDE_PADDING}`,
                   display: "flex",
                   flexDirection: "column",
                   justifyContent: "center",
@@ -675,7 +690,7 @@ export default function GallerySection() {
                     ref={(el) => { cardRefs.current[i] = el; }}
                     style={{
                       position: "absolute",
-                      left: isTablet ? "38%" : "33%",
+                      left: isTablet ? "34%" : "32.5%",
                       top: "55%",
                       marginLeft: -CARD_W / 2,
                       marginTop: -CARD_H / 2,

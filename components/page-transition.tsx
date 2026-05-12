@@ -6,9 +6,10 @@ import {
   useContext,
   useRef,
   useState,
+  useEffect,
   type ReactNode,
 } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 
 // ─── Constants ───────────────────────────────────────────────────────────────
@@ -23,6 +24,8 @@ type Phase = "idle" | "in" | "out";
 
 interface TransitionCtx {
   phase: Phase;
+  activePath: string;
+  setActivePath: (path: string) => void;
   navigateTo: (href: string, sectionId?: string) => void;
 }
 
@@ -38,18 +41,31 @@ export function usePageTransition() {
 // ─── Provider ────────────────────────────────────────────────────────────────
 export function PageTransitionProvider({ children }: { children: ReactNode }) {
   const [phase, setPhase] = useState<Phase>("idle");
+  const [activePath, setActivePath] = useState("/");
   const busy   = useRef(false);
   const router = useRouter();
+  const pathname = usePathname();
+  const lastPathname = useRef(pathname);
+
+  // Sync with actual pathname only on true route changes (prevents resets on section navigation)
+  useEffect(() => {
+    if (lastPathname.current !== pathname) {
+      setActivePath(pathname);
+      lastPathname.current = pathname;
+    }
+  }, [pathname]);
 
   const navigateTo = useCallback(
     (href: string, sectionId?: string) => {
       if (busy.current) return;
+      
+      const isDifferentPage = window.location.pathname !== href;
+      if (isDifferentPage) router.prefetch(href);
+
       busy.current = true;
 
       // 1. DROP CURTAIN IN
       setPhase("in");
-
-      const isDifferentPage = window.location.pathname !== href;
 
       // 2. START NAVIGATION EARLY (after a tiny delay so the first strip starts)
       setTimeout(() => {
@@ -59,7 +75,7 @@ export function PageTransitionProvider({ children }: { children: ReactNode }) {
       }, 80);
 
       // 3. LIFT CURTAIN after animation completes + small buffer for load
-      const totalWait = ANIM_TIME + (isDifferentPage ? 150 : 50);
+      const totalWait = ANIM_TIME + (isDifferentPage ? 350 : 50);
 
       setTimeout(() => {
         // SCROLL to section (or top)
@@ -67,28 +83,35 @@ export function PageTransitionProvider({ children }: { children: ReactNode }) {
           const el = document.getElementById(sectionId);
           if (el) {
             el.scrollIntoView({ behavior: "instant", block: "start" });
-          } else if (!isDifferentPage) {
+            
+            // Sync URL and Active State for section navigation
+            const targetPath = sectionId === "home" ? "/" : `/${sectionId}`;
+            window.history.pushState(null, "", targetPath);
+            setActivePath(targetPath);
+          } else {
             window.scrollTo({ top: 0, behavior: "instant" });
+            setActivePath("/");
           }
         } else if (!isDifferentPage) {
           window.scrollTo({ top: 0, behavior: "instant" });
+          setActivePath(href);
         }
 
-          // 3. LIFT CURTAIN OUT
+        // 3. LIFT CURTAIN OUT
         setPhase("out");
 
-          // 4. RESET
+        // 4. RESET
         setTimeout(() => {
           setPhase("idle");
           busy.current = false;
         }, ANIM_TIME + 50);
       }, totalWait);
     },
-    [router]
+    [router, pathname, setActivePath]
   );
 
   return (
-    <Ctx.Provider value={{ phase, navigateTo }}>
+    <Ctx.Provider value={{ phase, activePath, setActivePath, navigateTo }}>
       {children}
     </Ctx.Provider>
   );
