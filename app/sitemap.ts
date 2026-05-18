@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next'
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://veeshawellness.com'; // Replace with actual domain if known
+  const baseUrl = 'https://www.vlpl.co.in'; // Replace with actual domain if known
 
   return [
     {

@@ -14,21 +14,31 @@ const abhaya = Abhaya_Libre({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://www.vlpl.co.in"),
   title: "Veesha Wellness | Your Trusted Neighborhood Pharmacy",
   description: "Experience premium healthcare and wellness services at Veesha Wellness. High-quality medicines, healthcare products, and expert consultations.",
   keywords: ["Pharmacy", "Veesha Wellness", "Healthcare", "Medicines", "Wellness", "Medical Products", "Neighborhood Pharmacy"],
   openGraph: {
     title: "Veesha Wellness | Your Trusted Neighborhood Pharmacy",
     description: "Experience premium healthcare and wellness services at Veesha Wellness. High-quality medicines, healthcare products, and expert consultations.",
-    url: "https://veeshawellness.com",
+    url: "https://www.vlpl.co.in",
     siteName: "Veesha Wellness",
     locale: "en_US",
     type: "website",
+    images: [
+      {
+        url: "/logo.svg",
+        width: 1200,
+        height: 630,
+        alt: "Veesha Wellness Logo",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Veesha Wellness",
     description: "Experience premium healthcare and wellness services at Veesha Wellness.",
+    images: ["/logo.svg"],
   },
   icons: {
     icon: [
