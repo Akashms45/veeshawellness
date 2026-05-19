@@ -1,8 +1,52 @@
 "use client";
 
-import { Mail, Phone, Send, User } from "lucide-react";
+import { Mail, Phone, Send, User, Loader2, CheckCircle2 } from "lucide-react";
+import { useRef, useState } from "react";
+import emailjs from "@emailjs/browser";
 
 export default function Contact() {
+  const form = useRef<HTMLFormElement>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
+  const [message, setMessage] = useState("");
+
+  const sendEmail = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    
+    if (!form.current) return;
+    
+    setIsSubmitting(true);
+    setStatus("idle");
+    setMessage("");
+
+    // Replace these with your actual EmailJS credentials
+    // Service ID, Template ID, Public Key
+    emailjs
+      .sendForm(
+        "service_osdtzhp",
+        "template_ljnzpid",
+        form.current,
+        {
+          publicKey: "HAWgDx4FBh9Geuvoy",
+        }
+      )
+      .then(
+        () => {
+          setStatus("success");
+          setMessage("Message sent successfully! We'll get back to you soon.");
+          form.current?.reset();
+        },
+        (error) => {
+          setStatus("error");
+          setMessage("Failed to send the message. Please try again later.");
+          console.error("EmailJS Error:", error.text);
+        }
+      )
+      .finally(() => {
+        setIsSubmitting(false);
+      });
+  };
+
   return (
     <section
       id="contact"
@@ -34,7 +78,7 @@ export default function Contact() {
             <div className="flex flex-col gap-5 sm:gap-6">
               
               <a
-                href="mailto:hello@veeshawellness.com"
+                href="mailto:veenaagm@gmail.com"
                 className="flex items-center gap-4 group font-sans"
               >
                 <div
@@ -44,11 +88,11 @@ export default function Contact() {
                   <Mail size={17} className="text-white" />
                 </div>
                 <span className="text-white/80 text-sm sm:text-base group-hover:text-white transition-colors">
-                  hello@veeshawellness.com
+                  veenaagm@gmail.com
                 </span>
               </a>
 
-              <a href="tel:+12345678900" className="flex items-center gap-4 group font-sans">
+              <a href="tel:+916351259057" className="flex items-center gap-4 group font-sans">
                 <div
                   className="w-10 h-10 rounded-full flex items-center justify-center shrink-0 transition-colors"
                   style={{ backgroundColor: "rgba(255,255,255,0.12)" }}
@@ -56,7 +100,7 @@ export default function Contact() {
                   <Phone size={17} className="text-white" />
                 </div>
                 <span className="text-white/80 text-sm sm:text-base group-hover:text-white transition-colors">
-                  Support: (+1) 234 567 890
+                  Support: +91 635 125 9057
                 </span>
               </a>
             </div>
@@ -88,7 +132,7 @@ export default function Contact() {
                 Let's get in touch
               </h3>
 
-              <form className="space-y-4 sm:space-y-5">
+              <form ref={form} onSubmit={sendEmail} className="space-y-4 sm:space-y-5">
                 {/* Row 1 */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="flex flex-col gap-1.5">
@@ -102,7 +146,9 @@ export default function Contact() {
                       />
                       <input
                         id="fullName"
+                        name="user_name"
                         type="text"
+                        required
                         placeholder="Enter your name"
                         className="w-full pl-9 pr-4 py-3 rounded-xl border text-sm text-gray-900 placeholder:text-gray-500 outline-none transition-all focus:ring-2"
                         style={{
@@ -124,8 +170,10 @@ export default function Contact() {
                       />
                       <input
                         id="email"
+                        name="user_email"
                         type="email"
-                        placeholder="olivia@untitled.com"
+                        required
+                        placeholder="john.doe@example.com"
                         className="w-full pl-9 pr-4 py-3 rounded-xl border text-sm text-gray-900 placeholder:text-gray-500 outline-none transition-all focus:ring-2"
                         style={{ borderColor: "#e5e7eb" }}
                       />
@@ -140,18 +188,21 @@ export default function Contact() {
                   <div className="flex gap-2">
                     <select
                       id="countryCode"
+                      name="country_code"
                       aria-label="Country Code"
                       className="px-3 py-3 rounded-xl border text-sm text-gray-700 outline-none bg-white shrink-0"
                       style={{ borderColor: "#e5e7eb" }}
                     >
-                      <option>IN</option>
-                      <option>US</option>
-                      <option>UK</option>
+                      <option value="IN">IN</option>
+                      <option value="US">US</option>
+                      <option value="UK">UK</option>
                     </select>
                     <input
                       id="phone"
+                      name="user_phone"
                       type="tel"
-                      placeholder="+1 (555) 000-0000"
+                      required
+                      placeholder="98765 43210"
                       className="flex-1 px-4 py-3 rounded-xl border text-sm text-gray-900 placeholder:text-gray-500 outline-none transition-all focus:ring-2"
                       style={{ borderColor: "#e5e7eb" }}
                     />
@@ -167,20 +218,41 @@ export default function Contact() {
                   </label>
                   <textarea
                     id="message"
+                    name="message"
                     rows={4}
+                    required
                     placeholder="Type your message here"
                     className="w-full px-4 py-3 rounded-xl border text-sm text-gray-900 placeholder:text-gray-500 outline-none transition-all focus:ring-2 resize-none font-sans"
                     style={{ borderColor: "#e5e7eb" }}
                   />
                 </div>
 
+                {status !== "idle" && (
+                  <div className={`p-3 rounded-xl flex items-center gap-2 text-sm ${
+                    status === "success" ? "bg-green-50 text-green-700" : "bg-red-50 text-red-700"
+                  }`}>
+                    {status === "success" && <CheckCircle2 size={16} />}
+                    {message}
+                  </div>
+                )}
+
                 {/* Submit */}
                 <button
                   type="submit"
-                  className="px-7 py-3 rounded-xl text-white text-sm font-bold flex items-center gap-2 transition-all active:scale-95 hover:opacity-90"
+                  disabled={isSubmitting}
+                  className="px-7 py-3 rounded-xl text-white text-sm font-bold flex items-center justify-center gap-2 transition-all active:scale-95 hover:opacity-90 disabled:opacity-70 disabled:pointer-events-none w-full sm:w-auto"
                   style={{ backgroundColor: "#2a5491" }}
                 >
-                  Send Message
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 size={16} className="animate-spin" />
+                      Sending...
+                    </>
+                  ) : (
+                    <>
+                      Send Message
+                    </>
+                  )}
                 </button>
               </form>
             </div>
