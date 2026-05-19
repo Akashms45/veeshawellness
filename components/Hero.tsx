@@ -69,7 +69,8 @@ export default function Hero() {
                 style={{ willChange: "transform, opacity" }}
               >
                 <TransitionLink
-                  href="/contact"
+                  href="/"
+                  sectionId="contact"
                   className="bg-white hover:bg-gray-100 px-8 sm:px-10 py-3 sm:py-3.5 lg:py-4 rounded-full font-bold text-sm sm:text-base lg:text-lg inline-flex items-center justify-center transition-all shadow-xl active:scale-95 font-sans"
                   style={{ color: "#386BB4" }}
                 >

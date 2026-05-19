@@ -122,8 +122,12 @@ function NavbarContent() {
           {/* Logo */}
           <TransitionLink
             href="/"
+            sectionId="home"
             className="flex items-center gap-2 shrink-0"
-            onClick={() => { lastPathFromScroll.current = null; }}
+            onClick={() => { 
+              lastPathFromScroll.current = "/"; 
+              setActivePath("/");
+            }}
           >
             <img
               src="/logo.svg"
